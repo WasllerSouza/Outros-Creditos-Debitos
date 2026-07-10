@@ -23,6 +23,7 @@ import {
   selectPaginaAtual,
   selectPossuiUmSelecionado,
 } from '../../store/consulta-lotes.selectors';
+import { ZeroEsquerdaPipe } from '../../../../shared/pipes/zero-esquerda.pipe';
 
 @Component({
   selector: 'app-consulta-lotes',
@@ -40,6 +41,7 @@ import {
     PaginatorModule,
     PanelModule,
     TableModule,
+    ZeroEsquerdaPipe,
   ],
 
   templateUrl: './consulta-lotes.component.html',
@@ -61,8 +63,6 @@ export class ConsultaLotesPageComponent {
 
   readonly lotes$ = this.store.select(selectLotes);
 
-  readonly lotesPaginados$ = this.store.select(selectLotesPaginados);
-
   readonly lotesSelecionados$ = this.store.select(selectLotesSelecionados);
 
   readonly possuiUmSelecionado$ = this.store.select(selectPossuiUmSelecionado);
@@ -77,8 +77,7 @@ export class ConsultaLotesPageComponent {
     idFinal: [filtroInicial.idFinal],
     valorInicial: [filtroInicial.valorInicial],
     valorFinal: [filtroInicial.valorFinal],
-    dataInicial: [filtroInicial.dataInicial],
-    dataFinal: [filtroInicial.dataFinal],
+    dataRange: [filtroInicial.dataRange],
   });
 
   pesquisar(): void {
