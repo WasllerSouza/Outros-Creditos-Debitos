@@ -300,7 +300,7 @@ function aplicarFiltros(lotes: Lote[], filtro: FiltroPesquisa): Lote[] {
       (!filtro.idFinal || lote.id <= idFinal) &&
       (filtro.valorInicial == null || lote.valor >= filtro.valorInicial) &&
       (filtro.valorFinal == null || lote.valor <= filtro.valorFinal) &&
-      dataDentroDaFaixa(lote.dataEntrada, filtro.dataInicial, filtro.dataFinal)
+      dataDentroDaFaixa(lote.dataEntrada, filtro.dataRange)
     );
   });
 }
@@ -313,14 +313,14 @@ function mesmaSituacao(valor: string, filtro: string): boolean {
   return filtro === 'Todas' || valor === filtro;
 }
 
-function dataDentroDaFaixa(
-  data: string,
-  inicio: Date | null,
-  fim: Date | null,
-): boolean {
+function dataDentroDaFaixa(data: string, dataRange: Date[] | null): boolean {
+  if (!dataRange || dataRange.length === 0) {
+    return true; // Retorna verdadeiro se não houver faixa de datas
+  }
+
   const valor = normalizarData(parse(data, 'dd/MM/yyyy', new Date()));
-  const dataInicio = inicio ? normalizarData(inicio) : null;
-  const dataFim = fim ? normalizarData(fim) : null;
+  const dataInicio = dataRange[0] ? normalizarData(dataRange[0]) : null;
+  const dataFim = dataRange[1] ? normalizarData(dataRange[1]) : null;
 
   return (!dataInicio || valor >= dataInicio) && (!dataFim || valor <= dataFim);
 }
