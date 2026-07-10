@@ -13,12 +13,11 @@ import { PanelModule } from 'primeng/panel';
 import { TableModule } from 'primeng/table';
 
 import { ConsultaLotesActions } from '../../store/consulta-lotes.actions';
-import { Lote, filtroInicial } from '../../store/consulta-lotes.models';
+import { filtroInicial, Lote } from '../../store/consulta-lotes.models';
 import {
   selectLinhasPorPagina,
   selectLoading,
   selectLotes,
-  selectLotesPaginados,
   selectLotesSelecionados,
   selectPaginaAtual,
   selectPossuiUmSelecionado,
