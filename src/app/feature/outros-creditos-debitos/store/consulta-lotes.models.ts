@@ -6,8 +6,7 @@ export interface FiltroPesquisa {
   idFinal: string;
   valorInicial: number | null;
   valorFinal: number | null;
-  dataInicial: Date | null;
-  dataFinal: Date | null;
+  dataRange: Date[];
 }
 
 export interface Lote {
@@ -43,6 +42,5 @@ export const filtroInicial: FiltroPesquisa = {
   idFinal: '',
   valorInicial: null,
   valorFinal: null,
-  dataInicial: null,
-  dataFinal: null,
+  dataRange: [],
 };
