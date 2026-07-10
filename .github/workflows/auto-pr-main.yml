@@ -1,4 +1,4 @@
-name: Auto PR Develop -> Main
+name: Auto PR Main
 
 on:
   push:
@@ -10,17 +10,22 @@ permissions:
   pull-requests: write
 
 jobs:
+
   create-pr:
+
     runs-on: ubuntu-latest
 
     steps:
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v7
-        with:
-          token: ${{ secrets.MIRANTE_ACTIONS_PAT_SICOOB }}
-          base: main
-          branch: develop
-          title: "release: develop -> main"
-          body: |
-            PR automático para produção.
-          draft: false
+
+      - uses: actions/checkout@v4
+
+      - name: Create PR
+        env:
+          GH_TOKEN: ${{ secrets.MIRANTE_ACTIONS_PAT_SICOOB }}
+        run: |
+
+          gh pr create \
+            --base main \
+            --head develop \
+            --title "Release" \
+            --body "PR automático."
