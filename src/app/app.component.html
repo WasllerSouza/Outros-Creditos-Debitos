@@ -1,29 +1,29 @@
 <div class="app-shell">
   <aside class="sidebar" aria-label="Menu lateral">
     <a
-      class="sidebar__item sidebar__item--active"
+      class="sidebar__item sidebar__item--active flex flex-column align-items-center justify-content-center"
       href="#"
       aria-label="Contabil"
     >
-      <span class="sidebar__icon">C</span>
+      <span class="sidebar__icon flex align-items-center justify-content-center">C</span>
       <span class="sidebar__label">Contabil</span>
     </a>
   </aside>
 
-  <div class="app-shell__body">
-    <nav class="navbar" aria-label="Barra principal">
+  <div class="app-shell__body flex flex-column">
+    <nav class="navbar flex align-items-center justify-content-between" aria-label="Barra principal">
       <div>
         <h1 class="navbar__title">Outros Créditos/Débitos</h1>
-        <ol class="navbar__breadcrumb" aria-label="Breadcrumb">
+        <ol class="navbar__breadcrumb flex flex-wrap" aria-label="Breadcrumb">
           <li><a href="#">Início</a></li>
           <li>Outros Créditos/Débitos</li>
         </ol>
       </div>
 
-      <button class="navbar__action" type="button" aria-label="Ajuda">?</button>
+      <button class="navbar__action flex align-items-center justify-content-center" type="button" aria-label="Ajuda">?</button>
     </nav>
 
-    <main class="app-content">
+    <main class="app-content flex-1">
       <app-consulta-lotes></app-consulta-lotes>
     </main>
   </div>
