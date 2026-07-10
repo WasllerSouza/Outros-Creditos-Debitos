@@ -1,4 +1,4 @@
-name: Auto PR Main
+name: Release PR Automation
 
 on:
   push:
