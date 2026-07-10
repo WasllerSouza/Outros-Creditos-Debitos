@@ -1,0 +1,266 @@
+<section class="consulta-page">
+  <div class="consulta-card">
+    <p-panel styleClass="filtros-panel" [toggleable]="true" [collapsed]="false">
+      <ng-template pTemplate="header">
+        <div class="filtros-title">
+          <span>Filtros</span>
+          <strong>PESQUISAR LOTE OUTROS CR&Eacute;DITOS/D&Eacute;BITOS</strong>
+        </div>
+      </ng-template>
+
+      <form class="filtros-form" [formGroup]="form">
+        <div class="filtros-left">
+          <div class="field">
+            <label for="instituicaoResponsavel"
+              >Institui&ccedil;&atilde;o Resp.</label
+            >
+            <input
+              id="instituicaoResponsavel"
+              type="text"
+              pInputText
+              formControlName="instituicaoResponsavel"
+            />
+          </div>
+
+          <div class="field">
+            <label for="instituicao">Institui&ccedil;&atilde;o</label>
+            <input
+              id="instituicao"
+              type="text"
+              pInputText
+              formControlName="instituicao"
+            />
+          </div>
+
+          <div class="field">
+            <label for="situacao">Situa&ccedil;&atilde;o Lote</label>
+            <p-dropdown
+              inputId="situacao"
+              styleClass="field-control"
+              [options]="situacoes"
+              formControlName="situacao"
+              appendTo="body"
+            >
+            </p-dropdown>
+          </div>
+        </div>
+
+        <div class="filtros-right">
+          <span class="range-label">ID Lote</span>
+          <div class="range-group range-group--small">
+            <div class="field">
+              <label for="idInicial">De</label>
+              <input
+                id="idInicial"
+                type="text"
+                pInputText
+                formControlName="idInicial"
+              />
+            </div>
+
+            <div class="field">
+              <label for="idFinal">Até</label>
+              <input
+                id="idFinal"
+                type="text"
+                pInputText
+                formControlName="idFinal"
+              />
+            </div>
+          </div>
+
+          <span class="range-label">Valor Lote</span>
+          <div class="range-group range-group--small">
+            <div class="field">
+              <label for="valorInicial">De</label>
+              <input
+                id="valorInicial"
+                type="number"
+                pInputText
+                formControlName="valorInicial"
+              />
+            </div>
+
+            <div class="field">
+              <label for="valorFinal">At&eacute;</label>
+              <input
+                id="valorFinal"
+                type="number"
+                pInputText
+                formControlName="valorFinal"
+              />
+            </div>
+          </div>
+
+          <span class="range-label">Data Entrada</span>
+          <div class="range-group range-group--date">
+            <div class="field">
+              <label for="dataInicial">De</label>
+              <p-calendar
+                inputId="dataInicial"
+                styleClass="field-control"
+                formControlName="dataInicial"
+                dateFormat="dd/mm/yy"
+                appendTo="body"
+                [showIcon]="true"
+              >
+              </p-calendar>
+            </div>
+
+            <div class="field">
+              <label for="dataFinal">At&eacute;</label>
+              <p-calendar
+                inputId="dataFinal"
+                styleClass="field-control"
+                formControlName="dataFinal"
+                dateFormat="dd/mm/yy"
+                appendTo="body"
+                [showIcon]="true"
+              >
+              </p-calendar>
+            </div>
+          </div>
+        </div>
+      </form>
+
+      <div class="filtros-actions">
+        <button
+          type="button"
+          pButton
+          label="Pesquisar"
+          aria-label="Pesquisar"
+          [loading]="(loading$ | async) ?? false"
+          (click)="pesquisar()"
+        ></button>
+      </div>
+    </p-panel>
+
+    <div
+      class="acoes-toolbar"
+      role="toolbar"
+      aria-label="A&ccedil;&otilde;es do lote"
+    >
+      <div class="acoes-toolbar__group">
+        <button
+          type="button"
+          pButton
+          outlined
+          label="CONFIRMAR"
+          aria-label="CONFIRMAR"
+          (click)="confirmar()"
+        ></button>
+        <button
+          type="button"
+          pButton
+          outlined
+          label="ENVIAR"
+          aria-label="ENVIAR"
+          (click)="enviar()"
+        ></button>
+        <button
+          type="button"
+          pButton
+          outlined
+          label="VISUALIZAR JUSTIFICATIVA"
+          aria-label="VISUALIZAR JUSTIFICATIVA"
+          (click)="visualizarJustificativa()"
+        ></button>
+        <button
+          type="button"
+          pButton
+          label="INCLUIR"
+          aria-label="INCLUIR"
+          (click)="incluir()"
+        ></button>
+        <button
+          type="button"
+          pButton
+          outlined
+          label="ALTERAR"
+          aria-label="ALTERAR"
+          [disabled]="!((possuiUmSelecionado$ | async) ?? false)"
+          (click)="alterar()"
+        ></button>
+        <button
+          type="button"
+          pButton
+          outlined
+          label="EXCLUIR"
+          aria-label="EXCLUIR"
+          [disabled]="!((possuiUmSelecionado$ | async) ?? false)"
+          (click)="excluir()"
+        ></button>
+        <button
+          type="button"
+          pButton
+          outlined
+          label="VISUALIZAR"
+          aria-label="VISUALIZAR"
+          [disabled]="!((possuiUmSelecionado$ | async) ?? false)"
+          (click)="visualizar()"
+        ></button>
+      </div>
+    </div>
+
+    <p-table
+      dataKey="id"
+      styleClass="lotes-table"
+      [value]="(lotesPaginados$ | async) ?? []"
+      [loading]="(loading$ | async) ?? false"
+      [selection]="(lotesSelecionados$ | async) ?? []"
+      (selectionChange)="selecionarLotes($event)"
+      responsiveLayout="scroll"
+    >
+      <ng-template pTemplate="header">
+        <tr>
+          <th class="selection-col">
+            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+          </th>
+          <th>ID Lote</th>
+          <th>Data Entrada</th>
+          <th>Valor</th>
+          <th>Quant. Lan&ccedil;amentos</th>
+          <th>Usu&aacute;rio Registro</th>
+          <th>Usu&aacute;rio Aprova&ccedil;&atilde;o</th>
+          <th>Situa&ccedil;&atilde;o Lote</th>
+          <th>Data/Hora Situa&ccedil;&atilde;o Lote</th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-lote>
+        <tr>
+          <td class="selection-col">
+            <p-tableCheckbox [value]="lote"></p-tableCheckbox>
+          </td>
+          <td>{{ lote.id }}</td>
+          <td>{{ lote.dataEntrada }}</td>
+          <td>
+            {{ lote.valor | currency: "BRL" : "symbol" : "1.2-2" : "pt-BR" }}
+          </td>
+          <td>{{ lote.quantidadeLancamentos }}</td>
+          <td>{{ lote.usuarioRegistro }}</td>
+          <td>{{ lote.usuarioAprovacao }}</td>
+          <td>{{ lote.situacao }}</td>
+          <td>{{ lote.dataHoraSituacao }}</td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="9">Nenhum lote encontrado.</td>
+        </tr>
+      </ng-template>
+    </p-table>
+
+    <p-paginator
+      [first]="((paginaAtual$ | async) ?? 0) * ((linhasPorPagina$ | async) ?? 5)"
+      [rows]="(linhasPorPagina$ | async) ?? 5"
+      [totalRecords]="((lotes$ | async) ?? []).length"
+      [showCurrentPageReport]="false"
+      [showPageLinks]="true"
+      [showFirstLastIcon]="true"
+      (onPageChange)="trocarPagina($event.page ?? 0)"
+    >
+    </p-paginator>
+  </div>
+</section>

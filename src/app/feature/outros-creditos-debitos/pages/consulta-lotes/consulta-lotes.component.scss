@@ -1,0 +1,267 @@
+:host {
+  --brand: #007f78;
+  --brand-dark: #073f42;
+  --line: #d8e0e3;
+  display: block;
+}
+
+.consulta-page {
+  display: grid;
+  gap: 14px;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 54px;
+}
+
+.page-header h1 {
+  margin: 0 0 5px;
+  color: var(--brand);
+  font-size: 18px;
+}
+
+.page-header nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  color: #6b7b7e;
+  font-size: 12px;
+}
+
+.page-header a {
+  color: var(--brand);
+  font-weight: 700;
+}
+
+.page-header span::before {
+  content: ">";
+  margin-right: 6px;
+  color: #9aa6a8;
+}
+
+.consulta-card {
+  display: grid;
+  gap: 12px;
+  padding: clamp(18px, 4vw, 48px);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 16px 32px rgba(30, 46, 54, 0.12);
+}
+
+.filtros-title,
+.field {
+  display: grid;
+  gap: 6px;
+}
+
+.filtros-title {
+  color: #375154;
+  font-size: 12px;
+}
+
+.filtros-title strong,
+.field label,
+.range-label {
+  color: #153f42;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.filtros-form {
+  display: grid;
+  grid-template-columns: minmax(320px, 1.1fr) minmax(420px, 1fr);
+  gap: 28px;
+  padding-top: 10px;
+}
+
+.filtros-left,
+.filtros-right {
+  display: grid;
+  gap: 14px;
+}
+
+.filtros-right {
+  grid-template-columns: 100px minmax(0, 1fr);
+  align-items: end;
+}
+
+.range-label {
+  padding-bottom: 9px;
+}
+
+.range-group {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(120px, 1fr));
+  gap: 8px;
+}
+
+.range-group--small {
+  max-width: 310px;
+}
+
+.filtros-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 24px;
+}
+
+.selection-col {
+  width: 48px;
+  text-align: center;
+}
+
+.acoes-toolbar {
+  padding: 6px;
+  border-radius: 6px;
+  background: #eef1f5;
+}
+
+.acoes-toolbar__group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+:host ::ng-deep {
+  .filtros-panel,
+  .lotes-table {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .filtros-panel .p-panel-header,
+  .filtros-panel .p-panel-content {
+    border: 0;
+    background: #fff;
+  }
+
+  .filtros-panel .p-panel-header {
+    align-items: flex-start;
+    padding: 16px 18px 6px;
+  }
+
+  .filtros-panel .p-panel-content {
+    padding: 8px 18px 18px;
+  }
+
+  .p-inputtext,
+  .p-dropdown,
+  .p-calendar,
+  .p-calendar .p-inputtext {
+    width: 100%;
+  }
+
+  .p-inputtext,
+  .p-dropdown {
+    height: 34px;
+    border-color: #ccd7da;
+    border-radius: 4px;
+    font-size: 12px;
+    box-shadow: none;
+  }
+
+  .p-dropdown .p-dropdown-label {
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+
+  .p-calendar .p-button,
+  .filtros-actions .p-button,
+  .acoes-toolbar .p-button {
+    height: 34px;
+  }
+
+  .p-calendar .p-button {
+    width: 36px;
+    border-color: #ccd7da;
+    background: #fff;
+    color: #68787b;
+  }
+
+  .filtros-actions .p-button,
+  .acoes-toolbar .p-button:not(.p-button-outlined) {
+    border-color: var(--brand);
+    background: var(--brand);
+  }
+
+  .filtros-actions .p-button {
+    min-width: 112px;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 800;
+  }
+
+  .acoes-toolbar .p-button {
+    min-width: 96px;
+    border-color: #a9b3b6;
+    border-radius: 5px;
+    background: #fff;
+    color: #263f42;
+    font-size: 12px;
+    font-weight: 800;
+  }
+
+  .acoes-toolbar .p-button:disabled {
+    opacity: 0.45;
+  }
+
+  .lotes-table .p-datatable-thead > tr > th {
+    border: 0;
+    background: var(--brand-dark);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 800;
+    white-space: nowrap;
+  }
+
+  .lotes-table .p-datatable-tbody > tr > td {
+    border-bottom: 1px solid #dfeae9;
+    background: #f1fffb;
+    color: #263f42;
+    font-size: 12px;
+    white-space: nowrap;
+  }
+
+  .lotes-paginator {
+    justify-content: center;
+    border: 1px solid var(--line);
+    border-top: 0;
+    border-radius: 0 0 8px 8px;
+  }
+
+  .lotes-paginator .p-paginator-page.p-highlight,
+  .p-checkbox .p-checkbox-box.p-highlight {
+    border-color: var(--brand);
+    background: var(--brand);
+  }
+}
+
+@media (max-width: 1100px) {
+  .filtros-form,
+  .filtros-right {
+    grid-template-columns: 1fr;
+  }
+
+  .range-label {
+    padding-bottom: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .consulta-card {
+    padding: 12px;
+  }
+
+  .range-group {
+    grid-template-columns: 1fr;
+  }
+
+  .range-group--small {
+    max-width: none;
+  }
+}
