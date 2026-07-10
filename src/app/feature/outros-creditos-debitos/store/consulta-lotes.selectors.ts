@@ -1,9 +1,6 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 
-import {
-  ConsultaLotesState,
-  Lote,
-} from './consulta-lotes.models';
+import { ConsultaLotesState, Lote } from './consulta-lotes.models';
 import { consultaLotesFeatureKey } from './consulta-lotes.reducer';
 
 export const selectConsultaLotesState =
@@ -46,7 +43,7 @@ export const selectQuantidadeSelecionados = createSelector(
 
 export const selectPossuiUmSelecionado = createSelector(
   selectQuantidadeSelecionados,
-  (quantidade) => quantidade === 1,
+  (quantidade) => quantidade >= 1,
 );
 
 export const selectLotesPaginados = createSelector(
