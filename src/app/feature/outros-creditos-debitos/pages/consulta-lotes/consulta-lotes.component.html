@@ -60,11 +60,13 @@
 
         <div class="col-12 lg:col-6 grid align-items-end">
           <div class="grid m-0">
-            <!-- Campo 1: ID Lote (Ocupa 4 colunas em desktops) -->
             <div class="col-12 md:col-12 flex flex-column gap-2">
-              <label class="font-bold text-sm text-900">ID Lote</label>
+              <label for="idInicial" class="font-bold text-sm text-900"
+                >ID Lote</label
+              >
               <div class="flex align-items-center gap-2">
                 <input
+                  id="idInicial"
                   type="text"
                   pInputText
                   placeholder="De"
@@ -73,6 +75,8 @@
                 />
                 <span class="text-500 text-sm">até</span>
                 <input
+                  id="idFinal"
+                  aria-label="ID Lote final"
                   type="text"
                   pInputText
                   placeholder="Até"
@@ -82,12 +86,14 @@
               </div>
             </div>
 
-            <!-- Campo 2: Valor Lote (Ocupa 4 colunas em desktops) -->
             <div class="col-12 md:col-12 flex flex-column gap-2">
-              <label class="font-bold text-sm text-900">Valor Lote</label>
+              <label for="valorInicial" class="font-bold text-sm text-900"
+                >Valor Lote</label
+              >
               <div class="flex align-items-center gap-2">
                 <input
                   type="text"
+                  id="valorInicial"
                   pInputText
                   placeholder="Mínimo"
                   class="w-full"
@@ -96,6 +102,7 @@
                 <span class="text-500 text-sm">até</span>
                 <input
                   type="text"
+                  id="valorFinal"
                   pInputText
                   placeholder="Máximo"
                   class="w-full"
@@ -104,10 +111,12 @@
               </div>
             </div>
 
-            <!-- Campo 3: Data Entrada (Calendário de intervalo em 4 colunas) -->
             <div class="col-12 md:col-12 flex flex-column gap-2">
-              <label class="font-bold text-sm text-900">Data Entrada</label>
+              <label for="dataRangeInput" class="font-bold text-sm text-900"
+                >Data Entrada</label
+              >
               <p-calendar
+                inputId="dataRangeInput"
                 selectionMode="range"
                 [readonlyInput]="true"
                 [iconDisplay]="'input'"
