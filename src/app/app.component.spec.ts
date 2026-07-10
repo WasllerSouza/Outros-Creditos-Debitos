@@ -1,10 +1,13 @@
 import { TestBed } from '@angular/core/testing';
+import { provideNoopAnimations } from '@angular/platform-browser/animations';
+import { provideStore } from '@ngrx/store';
 import { AppComponent } from './app.component';
 
 describe('AppComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [AppComponent],
+      providers: [provideStore(), provideNoopAnimations()],
     }).compileComponents();
   });
 
@@ -20,10 +23,10 @@ describe('AppComponent', () => {
     expect(app.title).toEqual('outros-creditos-debitos');
   });
 
-  it('should render title', () => {
+  it('should render the consultation page', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, outros-creditos-debitos');
+    expect(compiled.querySelector('app-consulta-lotes')).toBeTruthy();
   });
 });

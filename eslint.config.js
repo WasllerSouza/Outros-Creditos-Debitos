@@ -8,6 +8,7 @@ module.exports = defineConfig([
   {
     ignores: [
       "**/.angular/**",
+      "**/coverage/**",
       "**/dist/**",
       "**/node_modules/**",
       "**/tmp/**"

@@ -7,7 +7,10 @@
     "build": "ng build",
     "lint": "eslint . --config eslint.config.js",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "jest",
+    "test:coverage": "jest --coverage",
+    "test:ci": "jest --ci --coverage --watch=false",
+    "build:production": "ng build --configuration production"
   },
   "private": true,
   "dependencies": {
