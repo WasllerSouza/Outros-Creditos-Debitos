@@ -26,6 +26,11 @@ export const selectLoading = createSelector(
   (state) => state.loading,
 );
 
+export const selectErroPesquisa = createSelector(
+  selectConsultaLotesState,
+  (state) => state.erro,
+);
+
 export const selectPaginaAtual = createSelector(
   selectConsultaLotesState,
   (state) => state.paginaAtual,
