@@ -28,6 +28,7 @@ export interface ConsultaLotesState {
   lotesSelecionados: Lote[];
   filtro: FiltroPesquisa;
   loading: boolean;
+  erro: string | null;
   paginaAtual: number;
   linhasPorPagina: number;
 }
