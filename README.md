@@ -58,6 +58,16 @@ O projeto estará disponível em [http://localhost:4200/](http://localhost:4200/
 - O modal de lançamento agrega os itens em memória e, ao concluir, cria um novo lote no estado.
 - A pesquisa possui debounce de 300 ms, indicador de carregamento e cenário de falha simulada para o valor `erro` no campo **Instituição**.
 
+### Inspecionando o estado com Redux DevTools
+
+O projeto já configura o `@ngrx/store-devtools`; portanto, basta instalar a extensão [Redux DevTools](https://github.com/reduxjs/redux-devtools#redux-devtools-extension) no navegador (disponível para Chrome, Edge e Firefox).
+
+1. Inicie a aplicação com `npm start` e abra `http://localhost:4200/`.
+2. Abra as ferramentas de desenvolvedor do navegador (`F12`) e selecione a aba **Redux**.
+3. Execute uma ação na interface, como pesquisar ou incluir um lançamento. As actions e o estado do reducer `consultaLotes` aparecerão na extensão.
+
+A configuração mantém as últimas 25 ações no histórico e usa `logOnly` em builds de produção.
+
 ### Interface e responsividade
 
 - **PrimeNG** fornece os componentes de interface, diálogos, tabelas, menus e mensagens.
