@@ -38,6 +38,26 @@ describe('consultaLotesReducer', () => {
     expect(result.lotes.map(({ id }) => id)).toEqual([1]);
     expect(result.lotesSelecionados).toEqual([]);
     expect(result.paginaAtual).toBe(0);
+    expect(result.loading).toBe(true);
+    expect(result.erro).toBeNull();
+  });
+
+  it('finishes or fails the search loading lifecycle', () => {
+    const pesquisando = consultaLotesReducer(
+      initialConsultaLotesState,
+      ConsultaLotesActions.pesquisar({ filtro }),
+    );
+    const concluida = consultaLotesReducer(
+      pesquisando,
+      ConsultaLotesActions.pesquisaConcluida(),
+    );
+    const falha = consultaLotesReducer(
+      pesquisando,
+      ConsultaLotesActions.pesquisaFalhou({ erro: 'Falha simulada' }),
+    );
+
+    expect(concluida.loading).toBe(false);
+    expect(falha).toMatchObject({ loading: false, erro: 'Falha simulada' });
   });
 
   it('applies every optional filter boundary', () => {

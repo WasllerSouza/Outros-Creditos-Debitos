@@ -257,6 +257,7 @@ export const initialConsultaLotesState: ConsultaLotesState = {
   lotesSelecionados: [],
   filtro: filtroInicial,
   loading: false,
+  erro: null,
   paginaAtual: 0,
   linhasPorPagina: 5,
 };
@@ -269,6 +270,17 @@ export const consultaLotesReducer = createReducer(
     lotes: aplicarFiltros(state.todosLotes, filtro),
     lotesSelecionados: [],
     paginaAtual: 0,
+    loading: true,
+    erro: null,
+  })),
+  on(ConsultaLotesActions.pesquisaConcluida, (state) => ({
+    ...state,
+    loading: false,
+  })),
+  on(ConsultaLotesActions.pesquisaFalhou, (state, { erro }) => ({
+    ...state,
+    loading: false,
+    erro,
   })),
   on(ConsultaLotesActions.limparFiltros, (state) => ({
     ...state,
@@ -276,6 +288,8 @@ export const consultaLotesReducer = createReducer(
     lotes: aplicarFiltros(state.todosLotes, filtroInicial),
     lotesSelecionados: [],
     paginaAtual: 0,
+    loading: false,
+    erro: null,
   })),
   on(ConsultaLotesActions.selecionarLotes, (state, { lotes }) => ({
     ...state,
