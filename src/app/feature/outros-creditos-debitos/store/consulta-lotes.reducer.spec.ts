@@ -1,12 +1,13 @@
 import { ConsultaLotesActions } from './consulta-lotes.actions';
-import { FiltroPesquisa, Lote } from './consulta-lotes.models';
 import {
   consultaLotesReducer,
   initialConsultaLotesState,
 } from './consulta-lotes.reducer';
+import { IFiltroPesquisa } from '../../../shared/interfaces/filtro-pesquisa.interface';
+import { ILote } from '../../../shared/interfaces/lote.interface';
 
 describe('consultaLotesReducer', () => {
-  const filtro: FiltroPesquisa = {
+  const filtro: IFiltroPesquisa = {
     instituicaoResponsavel: '0001',
     instituicao: 'central',
     situacao: 'Aberto',
@@ -101,7 +102,7 @@ describe('consultaLotesReducer', () => {
   });
 
   it('updates selected lots and current page', () => {
-    const lotes = [initialConsultaLotesState.todosLotes[1]] as Lote[];
+    const lotes = [initialConsultaLotesState.todosLotes[1]] as ILote[];
     const selected = consultaLotesReducer(
       initialConsultaLotesState,
       ConsultaLotesActions.selecionarLotes({ lotes }),

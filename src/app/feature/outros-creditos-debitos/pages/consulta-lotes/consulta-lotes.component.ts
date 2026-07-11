@@ -1,4 +1,9 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  inject,
+} from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { AsyncPipe, CommonModule } from '@angular/common';
@@ -12,15 +17,17 @@ import { InputTextModule } from 'primeng/inputtext';
 import { PaginatorModule } from 'primeng/paginator';
 import { PanelModule } from 'primeng/panel';
 import { TableModule } from 'primeng/table';
-import { DynamicDialogModule, DynamicDialogRef, DialogService } from 'primeng/dynamicdialog';
-import { MessageService } from 'primeng/api';
-import { MenuItem } from 'primeng/api';
+import {
+  DialogService,
+  DynamicDialogModule,
+  DynamicDialogRef,
+} from 'primeng/dynamicdialog';
+import { MenuItem, MessageService } from 'primeng/api';
 import { MenuModule } from 'primeng/menu';
-import { Subject, debounceTime, timer } from 'rxjs';
+import { debounceTime, Subject, timer } from 'rxjs';
 import { ToastModule } from 'primeng/toast';
 
 import { ConsultaLotesActions } from '../../store/consulta-lotes.actions';
-import { filtroInicial, FiltroPesquisa, Lote } from '../../store/consulta-lotes.models';
 import {
   selectLinhasPorPagina,
   selectLoading,
@@ -30,10 +37,12 @@ import {
   selectPossuiUmSelecionado,
 } from '../../store/consulta-lotes.selectors';
 import { ZeroEsquerdaPipe } from '../../../../shared/pipes/zero-esquerda.pipe';
-import {
-  IncluirLancamentoComponent,
-  Lancamento,
-} from '../../../../shared/components/incluir-lancamento/incluir-lancamento.component';
+import { IncluirLancamentoComponent } from '../../../../shared/components/incluir-lancamento/incluir-lancamento.component';
+import { FILTRO_SITUACOES } from '../../../../shared/enums/filtro-situacoes.enum';
+import { FILTRO_INICIAL } from '../../../../shared/enums/filtro-inicial.enum';
+import { ILancamento } from '../../../../shared/interfaces/lancamento.interface';
+import { IFiltroPesquisa } from '../../../../shared/interfaces/filtro-pesquisa.interface';
+import { ILote } from '../../../../shared/interfaces/lote.interface';
 
 @Component({
   selector: 'app-consulta-lotes',
@@ -71,7 +80,7 @@ export class ConsultaLotesPageComponent {
 
   private readonly destroyRef = inject(DestroyRef);
 
-  private readonly pesquisa$ = new Subject<FiltroPesquisa>();
+  private readonly pesquisa$ = new Subject<IFiltroPesquisa>();
 
   readonly loading$ = this.store.select(selectLoading);
 
@@ -85,27 +94,39 @@ export class ConsultaLotesPageComponent {
 
   readonly possuiUmSelecionado$ = this.store.select(selectPossuiUmSelecionado);
 
-  readonly situacoes = ['Todas', 'Aberto', 'Enviado', 'Confirmado'];
+  readonly situacoes = FILTRO_SITUACOES;
 
   readonly acoesMenu: MenuItem[] = [
-    { label: 'Confirmar', icon: 'pi pi-check', command: () => this.confirmar() },
+    {
+      label: 'Confirmar',
+      icon: 'pi pi-check',
+      command: () => this.confirmar(),
+    },
     { label: 'Enviar', icon: 'pi pi-send', command: () => this.enviar() },
-    { label: 'Visualizar justificativa', icon: 'pi pi-file', command: () => this.visualizarJustificativa() },
+    {
+      label: 'Visualizar justificativa',
+      icon: 'pi pi-file',
+      command: () => this.visualizarJustificativa(),
+    },
     { separator: true },
     { label: 'Alterar', icon: 'pi pi-pencil', command: () => this.alterar() },
     { label: 'Excluir', icon: 'pi pi-trash', command: () => this.excluir() },
-    { label: 'Visualizar', icon: 'pi pi-eye', command: () => this.visualizar() },
+    {
+      label: 'Visualizar',
+      icon: 'pi pi-eye',
+      command: () => this.visualizar(),
+    },
   ];
 
   readonly form = this.fb.group({
-    instituicaoResponsavel: [filtroInicial.instituicaoResponsavel],
-    instituicao: [filtroInicial.instituicao],
-    situacao: [filtroInicial.situacao],
-    idInicial: [filtroInicial.idInicial],
-    idFinal: [filtroInicial.idFinal],
-    valorInicial: [filtroInicial.valorInicial],
-    valorFinal: [filtroInicial.valorFinal],
-    dataRange: [filtroInicial.dataRange],
+    instituicaoResponsavel: [FILTRO_INICIAL.instituicaoResponsavel],
+    instituicao: [FILTRO_INICIAL.instituicao],
+    situacao: [FILTRO_INICIAL.situacao],
+    idInicial: [FILTRO_INICIAL.idInicial],
+    idFinal: [FILTRO_INICIAL.idFinal],
+    valorInicial: [FILTRO_INICIAL.valorInicial],
+    valorFinal: [FILTRO_INICIAL.valorFinal],
+    dataRange: [FILTRO_INICIAL.dataRange],
   });
 
   private readonly dialogService = inject(DialogService);
@@ -125,11 +146,11 @@ export class ConsultaLotesPageComponent {
   }
 
   limparFiltros(): void {
-    this.form.reset(filtroInicial);
+    this.form.reset(FILTRO_INICIAL as unknown as IFiltroPesquisa);
     this.store.dispatch(ConsultaLotesActions.limparFiltros());
   }
 
-  selecionarLotes(lotes: Lote[]): void {
+  selecionarLotes(lotes: ILote[]): void {
     this.store.dispatch(ConsultaLotesActions.selecionarLotes({ lotes }));
   }
 
@@ -146,7 +167,7 @@ export class ConsultaLotesPageComponent {
       baseZIndex: 10000,
     });
 
-    this.ref.onClose.subscribe((lancamentos: Lancamento[] | undefined) => {
+    this.ref.onClose.subscribe((lancamentos: ILancamento[] | undefined) => {
       if (!lancamentos?.length) return;
 
       const agora = new Date();
@@ -211,17 +232,23 @@ export class ConsultaLotesPageComponent {
     });
   }
 
-  private executarPesquisa(filtro: FiltroPesquisa): void {
+  private executarPesquisa(filtro: IFiltroPesquisa): void {
     if (filtro.instituicao.trim().toLowerCase() === 'erro') {
       const erro = 'Falha simulada ao pesquisar lotes. Tente novamente.';
       this.store.dispatch(ConsultaLotesActions.pesquisaFalhou({ erro }));
-      this.messageService.add({ severity: 'error', summary: 'Pesquisa indisponível', detail: erro });
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Pesquisa indisponível',
+        detail: erro,
+      });
       return;
     }
 
     this.store.dispatch(ConsultaLotesActions.pesquisar({ filtro }));
     timer(350)
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => this.store.dispatch(ConsultaLotesActions.pesquisaConcluida()));
+      .subscribe(() =>
+        this.store.dispatch(ConsultaLotesActions.pesquisaConcluida()),
+      );
   }
 }
