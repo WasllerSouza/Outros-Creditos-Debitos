@@ -9,5 +9,6 @@ export const ConsultaLotesActions = createActionGroup({
     'Limpar Filtros': emptyProps(),
     'Selecionar Lotes': props<{ lotes: Lote[] }>(),
     'Trocar Pagina': props<{ pagina: number }>(),
+    'Incluir Lote': props<{ lote: Omit<Lote, 'id'> }>(),
   },
 });
