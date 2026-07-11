@@ -184,13 +184,13 @@
       styleClass="p-datatable-sm"
       ><ng-template pTemplate="header"
         ><tr>
-          <th class="select-column"></th>
-          <th>ID</th>
-          <th>PA</th>
-          <th>Conta Corrente</th>
-          <th>Histórico</th>
-          <th>Valor</th>
-          <th>Situação</th>
+          <th scope="col" class="select-column" aria-label="Seleção"></th>
+          <th scope="col">ID</th>
+          <th scope="col">PA</th>
+          <th scope="col">Conta Corrente</th>
+          <th scope="col">Histórico</th>
+          <th scope="col">Valor</th>
+          <th scope="col">Situação</th>
         </tr></ng-template
       ><ng-template pTemplate="body" let-lancamento
         ><tr [pSelectableRow]="lancamento">
@@ -300,10 +300,10 @@
     styleClass="p-datatable-sm mt-3"
     ><ng-template pTemplate="header"
       ><tr>
-        <th>Conta Corrente</th>
-        <th>Titular</th>
-        <th>Cooperativa</th>
-        <th></th></tr></ng-template
+        <th scope="col">Conta Corrente</th>
+        <th scope="col">Titular</th>
+        <th scope="col">Cooperativa</th>
+        <th scope="col" aria-label="Ações"></th></tr></ng-template
     ><ng-template pTemplate="body" let-conta
       ><tr>
         <td>{{ conta.numero }}</td>
@@ -359,12 +359,12 @@
     styleClass="p-datatable-sm mt-3"
     ><ng-template pTemplate="header"
       ><tr>
-        <th>ID Evento</th>
-        <th>Cód. Evento</th>
-        <th>Descrição</th>
-        <th>Dt. início</th>
-        <th>Dt. fim</th>
-        <th></th></tr></ng-template
+        <th scope="col">ID Evento</th>
+        <th scope="col">Cód. Evento</th>
+        <th scope="col">Descrição</th>
+        <th scope="col">Dt. início</th>
+        <th scope="col">Dt. fim</th>
+        <th scope="col" aria-label="Ações"></th></tr></ng-template
     ><ng-template pTemplate="body" let-evento
       ><tr>
         <td>{{ evento.id }}</td>
