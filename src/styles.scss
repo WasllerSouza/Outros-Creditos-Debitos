@@ -3,6 +3,14 @@
 @import "primeflex/primeflex.css";
 @import "primeicons/primeicons.css";
 
+:root {
+  --app-color-primary: #096464;
+  --app-color-primary-dark: #006f6b;
+  --app-color-primary-light: #e8f6f5;
+  --app-color-page: #eef0f5;
+  --app-color-border: #d8dde2;
+}
+
 .p-datepicker
   .p-datepicker-header
   .p-datepicker-title
