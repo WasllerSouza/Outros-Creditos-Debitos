@@ -1,12 +1,13 @@
 import { ConsultaLotesActions } from './consulta-lotes.actions';
-import { FiltroPesquisa, Lote } from './consulta-lotes.models';
 import {
   consultaLotesReducer,
   initialConsultaLotesState,
 } from './consulta-lotes.reducer';
+import { IFiltroPesquisa } from '../../../shared/interfaces/filtro-pesquisa.interface';
+import { ILote } from '../../../shared/interfaces/lote.interface';
 
 describe('consultaLotesReducer', () => {
-  const filtro: FiltroPesquisa = {
+  const filtro: IFiltroPesquisa = {
     instituicaoResponsavel: '0001',
     instituicao: 'central',
     situacao: 'Aberto',
@@ -38,6 +39,26 @@ describe('consultaLotesReducer', () => {
     expect(result.lotes.map(({ id }) => id)).toEqual([1]);
     expect(result.lotesSelecionados).toEqual([]);
     expect(result.paginaAtual).toBe(0);
+    expect(result.loading).toBe(true);
+    expect(result.erro).toBeNull();
+  });
+
+  it('finishes or fails the search loading lifecycle', () => {
+    const pesquisando = consultaLotesReducer(
+      initialConsultaLotesState,
+      ConsultaLotesActions.pesquisar({ filtro }),
+    );
+    const concluida = consultaLotesReducer(
+      pesquisando,
+      ConsultaLotesActions.pesquisaConcluida(),
+    );
+    const falha = consultaLotesReducer(
+      pesquisando,
+      ConsultaLotesActions.pesquisaFalhou({ erro: 'Falha simulada' }),
+    );
+
+    expect(concluida.loading).toBe(false);
+    expect(falha).toMatchObject({ loading: false, erro: 'Falha simulada' });
   });
 
   it('applies every optional filter boundary', () => {
@@ -81,7 +102,7 @@ describe('consultaLotesReducer', () => {
   });
 
   it('updates selected lots and current page', () => {
-    const lotes = [initialConsultaLotesState.todosLotes[1]] as Lote[];
+    const lotes = [initialConsultaLotesState.todosLotes[1]] as ILote[];
     const selected = consultaLotesReducer(
       initialConsultaLotesState,
       ConsultaLotesActions.selecionarLotes({ lotes }),
