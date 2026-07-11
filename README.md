@@ -1,32 +1,83 @@
 # Outros Créditos/Débitos
 
+> Aplicação web para consulta, filtragem e manutenção de lotes de outros créditos e débitos.
+
+[![CI](https://github.com/WasllerSouza/Outros-Creditos-Debitos/actions/workflows/ci.yml/badge.svg)](https://github.com/WasllerSouza/Outros-Creditos-Debitos/actions/workflows/ci.yml)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=WasllerSouza_Outros-Creditos-Debitos&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=WasllerSouza_Outros-Creditos-Debitos)
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=WasllerSouza_Outros-Creditos-Debitos&metric=bugs)](https://sonarcloud.io/summary/new_code?id=WasllerSouza_Outros-Creditos-Debitos)
-[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=WasllerSouza_Outros-Creditos-Debitos&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=WasllerSouza_Outros-Creditos-Debitos)
-[![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=WasllerSouza_Outros-Creditos-Debitos&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=WasllerSouza_Outros-Creditos-Debitos)
-[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=WasllerSouza_Outros-Creditos-Debitos&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=WasllerSouza_Outros-Creditos-Debitos)
-[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=WasllerSouza_Outros-Creditos-Debitos&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=WasllerSouza_Outros-Creditos-Debitos)
-[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=WasllerSouza_Outros-Creditos-Debitos&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=WasllerSouza_Outros-Creditos-Debitos)
-[![SonarQube Cloud](https://sonarcloud.io/images/project_badges/sonarcloud-light.svg)](https://sonarcloud.io/summary/new_code?id=WasllerSouza_Outros-Creditos-Debitos)
+[![Licença: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Angular](https://img.shields.io/badge/Angular-17-DD0031?logo=angular)](https://angular.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.4-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Node.js](https://img.shields.io/badge/Node.js-20-339933?logo=node.js&logoColor=white)](https://nodejs.org/)
 
-Aplicação web para consulta e manutenção de lotes de outros créditos e débitos. A interface permite filtrar lotes, incluir lançamentos em memória e acompanhar os dados em uma grade responsiva.
+## 📋 Sumário
 
-Desenvolvida com **Angular 17** e Angular CLI 17.3.
+- [Sobre o Projeto](#-sobre-o-projeto)
+- [Principais Funcionalidades](#-principais-funcionalidades)
+- [Tecnologias Utilizadas](#️-tecnologias-utilizadas)
+- [Pré-requisitos e Configuração do Ambiente](#️-pré-requisitos-e-configuração-do-ambiente)
+- [Como Instalar e Executar](#-como-instalar-e-executar)
+- [Como Usar](#-como-usar)
+- [Como Executar os Testes](#-como-executar-os-testes)
+- [Como Contribuir](#-como-contribuir)
+- [Licença](#-licença)
+- [Contato e Links Úteis](#-contato-e-links-úteis)
 
-## 🚀 Instruções de Instalação e Execução
+## 🚀 Sobre o Projeto
 
-### Pré-requisitos
+O **Outros Créditos/Débitos** é uma aplicação web para centralizar a consulta e a manutenção de lotes financeiros. A interface permite pesquisar registros, aplicar filtros, visualizar informações em uma grade responsiva e incluir lançamentos em memória.
 
-- [Node.js](https://nodejs.org/) **20 LTS** (recomendado para este projeto Angular 17).
+O projeto foi estruturado com foco em organização por funcionalidades, gerenciamento previsível de estado e experiência responsiva para desktop, tablet e dispositivos móveis.
+
+## ✨ Principais Funcionalidades
+
+- Consulta de lotes de outros créditos e débitos.
+- Filtros de pesquisa com debounce.
+- Paginação e seleção de registros.
+- Inclusão de lançamentos em memória.
+- Simulação de carregamento e cenários de erro.
+- Gerenciamento centralizado de estado com NgRx Store.
+- Interface responsiva construída com PrimeNG e PrimeFlex.
+- Inspeção de actions e estado com Redux DevTools.
+- Análise de qualidade contínua com SonarQube Cloud.
+
+## 🛠️ Tecnologias Utilizadas
+
+| Tecnologia | Versão | Finalidade |
+| --- | --- | --- |
+| [Angular](https://angular.dev/) | 17.3 | Framework da aplicação |
+| [TypeScript](https://www.typescriptlang.org/) | 5.4 | Linguagem de desenvolvimento |
+| [NgRx Store](https://ngrx.io/guide/store) | 17.2 | Gerenciamento de estado |
+| [NgRx Store Devtools](https://ngrx.io/guide/store-devtools) | 17.2 | Integração com Redux DevTools |
+| [PrimeNG](https://primeng.org/) | 17.18 | Componentes de interface |
+| [PrimeFlex](https://primeflex.org/) | 3.3 | Utilitários de layout responsivo |
+| [Jest](https://jestjs.io/) | 29.7 | Testes unitários |
+| [ESLint](https://eslint.org/) | 9.39 | Análise estática de código |
+| [SonarQube Cloud](https://www.sonarsource.com/products/sonarcloud/) | — | Qualidade e cobertura de código |
+| [GitHub Actions](https://github.com/features/actions) | — | Integração e entrega contínuas |
+
+## ⚙️ Pré-requisitos e Configuração do Ambiente
+
+Antes de iniciar, instale:
+
+- [Node.js](https://nodejs.org/) 20 LTS ou superior.
 - `npm`, instalado junto com o Node.js.
-- Git.
+- [Git](https://git-scm.com/).
 
-### Instalação
+A URL pública da aplicação está centralizada em `src/environments/environment.ts`:
 
-Clone o repositório e acesse a pasta do projeto:
+```ts
+export const environment = {
+  appUrl: 'https://wasllersouza.github.io/Outros-Creditos-Debitos/',
+};
+```
+
+## 📦 Como Instalar e Executar
+
+Clone o repositório:
 
 ```bash
-git clone <url-do-repositorio>
+git clone https://github.com/WasllerSouza/Outros-Creditos-Debitos.git
 cd Outros-Creditos-Debitos
 ```
 
@@ -39,66 +90,98 @@ npm install
 Inicie o servidor de desenvolvimento:
 
 ```bash
-ng serve
+npm start
 ```
 
-O projeto estará disponível em [http://localhost:4200/](http://localhost:4200/). Como alternativa, é possível executar `npm start`.
+A aplicação estará disponível em `http://localhost:4200/`.
 
-## 🛠️ Decisões Técnicas Relevantes
-
-### Arquitetura
-
-- Estrutura orientada a _features_, com o domínio principal em `src/app/feature/outros-creditos-debitos`.
-- Uso de **standalone components**, sem módulos Angular de feature.
-- Componentes reutilizáveis e pipes compartilhados ficam em `src/app/shared`.
-
-### Estado e fluxo de dados
-
-- **NgRx Store** centraliza os dados da consulta, filtros, seleção, paginação, carregamento e erros simulados.
-- O modal de lançamento agrega os itens em memória e, ao concluir, cria um novo lote no estado.
-- A pesquisa possui debounce de 300 ms, indicador de carregamento e cenário de falha simulada para o valor `erro` no campo **Instituição**.
-
-### Inspecionando o estado com Redux DevTools
-
-O projeto já configura o `@ngrx/store-devtools`; portanto, basta instalar a extensão [Redux DevTools](https://github.com/reduxjs/redux-devtools#redux-devtools-extension) no navegador (disponível para Chrome, Edge e Firefox).
-
-1. Inicie a aplicação com `npm start` e abra `http://localhost:4200/`.
-2. Abra as ferramentas de desenvolvedor do navegador (`F12`) e selecione a aba **Redux**.
-3. Execute uma ação na interface, como pesquisar ou incluir um lançamento. As actions e o estado do reducer `consultaLotes` aparecerão na extensão.
-
-A configuração mantém as últimas 25 ações no histórico e usa `logOnly` em builds de produção.
-
-### Interface e responsividade
-
-- **PrimeNG** fornece os componentes de interface, diálogos, tabelas, menus e mensagens.
-- **PrimeFlex** é utilizado para o grid e utilitários responsivos.
-- A navegação lateral permanece no desktop, vira drawer no tablet e celular; as ações do lote são condensadas em menu nas telas menores.
-- Os estilos usam variáveis de tema do PrimeNG e tokens globais de aplicação definidos em `src/styles.scss`.
-
-### Qualidade e acessibilidade
-
-- Testes unitários com **Jest** e `jest-preset-angular`.
-- ESLint, Prettier e integração com **SonarCloud** para qualidade contínua.
-- Labels associados aos campos, atributos ARIA, cabeçalhos de tabela com `scope` e foco/fechamento por teclado nos diálogos.
-
-## ✅ Comandos Úteis
+Para gerar o build de produção:
 
 ```bash
-# Executa os testes unitários
-npm test
-
-# Gera relatório de cobertura
-npm run test:coverage
-
-# Executa o lint
-npm run lint
-
-# Gera o build de produção
 npm run build:production
 ```
 
-## 📌 Links Úteis e Observações
+Os arquivos gerados ficarão em `dist/outros-creditos-debitos/`.
 
-- Não há variáveis de ambiente obrigatórias para executar a aplicação localmente.
-- O relatório de cobertura é gerado em `coverage/lcov.info` e consumido pelo SonarCloud.
-- Os dados atuais são mocks locais; integrações com APIs podem ser adicionadas preservando o fluxo NgRx existente.
+## 🎮 Como Usar
+
+1. Acesse a aplicação no navegador.
+2. Utilize os filtros da tela de consulta para localizar os lotes desejados.
+3. Selecione um lote na tabela para visualizar suas informações.
+4. Utilize a ação de inclusão para adicionar novos lançamentos.
+5. Após confirmar a inclusão, o novo lote será refletido no estado da aplicação.
+
+### Inspecionando o estado com Redux DevTools
+
+1. Instale a extensão [Redux DevTools](https://github.com/reduxjs/redux-devtools#redux-devtools-extension) no Chrome, Edge ou Firefox.
+2. Execute a aplicação localmente com `npm start`.
+3. Abra as ferramentas de desenvolvedor do navegador com `F12`.
+4. Acesse a aba **Redux**.
+5. Interaja com a aplicação e acompanhe as actions e o estado `consultaLotes`.
+
+## 🧪 Como Executar os Testes
+
+Execute os testes unitários:
+
+```bash
+npm test
+```
+
+Gere o relatório de cobertura:
+
+```bash
+npm run test:coverage
+```
+
+Execute os testes no modo de integração contínua:
+
+```bash
+npm run test:ci
+```
+
+Execute a análise de lint:
+
+```bash
+npm run lint
+```
+
+## 🤝 Como Contribuir
+
+1. Faça um fork do projeto.
+2. Crie uma branch para sua alteração:
+
+   ```bash
+   git checkout -b feature/minha-alteracao
+   ```
+
+3. Faça suas alterações e execute os testes:
+
+   ```bash
+   npm run lint
+   npm test
+   ```
+
+4. Crie um commit seguindo o padrão de commits convencionais:
+
+   ```bash
+   git commit -m "feat: adiciona nova funcionalidade"
+   ```
+
+5. Envie sua branch:
+
+   ```bash
+   git push origin feature/minha-alteracao
+   ```
+
+6. Abra um Pull Request com uma descrição clara da alteração proposta.
+
+## 📄 Licença
+
+Este projeto está licenciado sob a [Licença MIT](LICENSE).
+
+## 📬 Contato e Links Úteis
+
+- Repositório: [github.com/WasllerSouza/Outros-Creditos-Debitos](https://github.com/WasllerSouza/Outros-Creditos-Debitos)
+- Aplicação publicada: [Outros Créditos/Débitos](https://wasllersouza.github.io/Outros-Creditos-Debitos/)
+- SonarQube Cloud: [Dashboard do projeto](https://sonarcloud.io/summary/new_code?id=WasllerSouza_Outros-Creditos-Debitos)
+- GitHub: [@WasllerSouza](https://github.com/WasllerSouza)
