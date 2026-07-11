@@ -285,6 +285,17 @@ export const consultaLotesReducer = createReducer(
     ...state,
     paginaAtual: pagina,
   })),
+  on(ConsultaLotesActions.incluirLote, (state, { lote }) => {
+    const proximoId = Math.max(0, ...state.todosLotes.map((item) => item.id)) + 1;
+    const todosLotes = [...state.todosLotes, { ...lote, id: proximoId }];
+
+    return {
+      ...state,
+      todosLotes,
+      lotes: aplicarFiltros(todosLotes, state.filtro),
+      lotesSelecionados: [],
+    };
+  }),
 );
 
 function aplicarFiltros(lotes: Lote[], filtro: FiltroPesquisa): Lote[] {

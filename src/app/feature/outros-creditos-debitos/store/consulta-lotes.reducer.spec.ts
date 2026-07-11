@@ -94,4 +94,31 @@ describe('consultaLotesReducer', () => {
     expect(selected.lotesSelecionados).toBe(lotes);
     expect(paged.paginaAtual).toBe(2);
   });
+
+  it('adds the concluded lot to todosLotes and refreshes the visible list', () => {
+    const result = consultaLotesReducer(
+      initialConsultaLotesState,
+      ConsultaLotesActions.incluirLote({
+        lote: {
+          instituicaoResponsavel: '0001 - Ponto de Atendimento',
+          instituicao: '0002 - SICOOB CENTRAL',
+          dataEntrada: '11/07/2026',
+          valor: 123.45,
+          quantidadeLancamentos: 2,
+          usuarioRegistro: 'usuario-atual',
+          usuarioAprovacao: '',
+          situacao: 'Aberto',
+          dataHoraSituacao: '11/07/2026, 10:00:00',
+        },
+      }),
+    );
+
+    const incluido = result.todosLotes.at(-1);
+    expect(incluido).toMatchObject({
+      id: 21,
+      valor: 123.45,
+      quantidadeLancamentos: 2,
+    });
+    expect(result.lotes).toContainEqual(incluido);
+  });
 });

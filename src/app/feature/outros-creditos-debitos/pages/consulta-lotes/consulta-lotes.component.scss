@@ -1,42 +1,19 @@
-//:host {
-//  --brand: #007f78;
-//  --brand-dark: #073f42;
-//  --line: #d8e0e3;
-//  display: block;
-//}
-//
-//.selection-col {
-//  width: 48px;
-//}
-//
-//:host ::ng-deep {
-//  .filtros-panel,
-//  .lotes-table {
-//    border: 1px solid var(--line);
-//    border-radius: 8px;
-//    overflow: hidden;
-//  }
-//
-//  .filtros-panel .p-panel-header,
-//  .filtros-panel .p-panel-content {
-//    border: 0;
-//    background: #fff;
-//  }
-//
-//  .filtros-panel .p-panel-header { padding: 1rem 1.125rem .375rem; }
-//  .filtros-panel .p-panel-content { padding: .5rem 1.125rem 1.125rem; }
-//
-//  .p-inputtext, .p-dropdown, .p-calendar, .p-calendar .p-inputtext { width: 100%; }
-//  .p-inputtext, .p-dropdown { height: 34px; border-color: #ccd7da; border-radius: 4px; font-size: 12px; box-shadow: none; }
-//  .p-dropdown .p-dropdown-label { padding: 8px 12px; font-size: 12px; }
-//  .p-calendar .p-button, .p-button { height: 34px; }
-//  .p-calendar .p-button { width: 36px; border-color: #ccd7da; background: #fff; color: #68787b; }
-//  .p-button:not(.p-button-outlined) { border-color: var(--brand); background: var(--brand); }
-//  .p-button { min-width: 96px; font-size: 12px; font-weight: 800; }
-//  .p-button:disabled { opacity: .45; }
-//
-//  .lotes-table .p-datatable-thead > tr > th { border: 0; background: var(--brand-dark); color: #fff; font-size: 12px; font-weight: 800; white-space: nowrap; }
-//  .lotes-table .p-datatable-tbody > tr > td { border-bottom: 1px solid #dfeae9; background: #f1fffb; color: #263f42; font-size: 12px; white-space: nowrap; }
-//  .lotes-paginator { justify-content: center; border: 1px solid var(--line); border-top: 0; border-radius: 0 0 8px 8px; }
-//  .lotes-paginator .p-paginator-page.p-highlight, .p-checkbox .p-checkbox-box.p-highlight { border-color: var(--brand); background: var(--brand); }
-//}
+:host { display: block; }
+
+.action-menu { display: none; gap: .5rem; }
+
+:host ::ng-deep {
+  .lotes-table { overflow-x: auto; }
+  .lotes-table .p-datatable-wrapper { min-width: 100%; }
+}
+
+@media (max-width: 1023px) {
+  .action-buttons { display: none !important; }
+  .action-menu { display: flex; }
+}
+
+@media (max-width: 767px) {
+  .range-fields { align-items: stretch !important; flex-direction: column; }
+  .range-fields > span { display: none; }
+  .range-fields .p-inputtext { width: 100%; }
+}
