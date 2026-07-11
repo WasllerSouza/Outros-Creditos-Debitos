@@ -268,6 +268,9 @@
 </form>
 <p-dialog
   [(visible)]="buscaContaVisivel"
+  [closeOnEscape]="true"
+  [focusOnShow]="true"
+  [focusTrap]="true"
   [modal]="true"
   [draggable]="false"
   [showHeader]="false"
@@ -327,6 +330,9 @@
 >
 <p-dialog
   [(visible)]="buscaEventoVisivel"
+  [closeOnEscape]="true"
+  [focusOnShow]="true"
+  [focusTrap]="true"
   [modal]="true"
   [draggable]="false"
   [showHeader]="false"

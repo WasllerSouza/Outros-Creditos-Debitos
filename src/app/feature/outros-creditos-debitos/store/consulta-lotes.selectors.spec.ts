@@ -1,6 +1,7 @@
 import { initialConsultaLotesState } from './consulta-lotes.reducer';
 import {
   selectFiltro,
+  selectErroPesquisa,
   selectLinhasPorPagina,
   selectLoading,
   selectLotes,
@@ -25,6 +26,7 @@ describe('consulta lotes selectors', () => {
     expect(selectLotes(state)).toBe(state.consultaLotes.lotes);
     expect(selectLotesSelecionados(state)).toBe(state.consultaLotes.lotesSelecionados);
     expect(selectLoading(state)).toBe(false);
+    expect(selectErroPesquisa(state)).toBeNull();
     expect(selectPaginaAtual(state)).toBe(1);
     expect(selectLinhasPorPagina(state)).toBe(5);
   });
