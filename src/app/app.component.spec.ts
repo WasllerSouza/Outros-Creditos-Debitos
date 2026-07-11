@@ -1,14 +1,26 @@
 import { TestBed } from '@angular/core/testing';
+import { LOCALE_ID } from '@angular/core';
+import { registerLocaleData } from '@angular/common';
+import localePt from '@angular/common/locales/pt';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { provideStore } from '@ngrx/store';
 import { AppComponent } from './app.component';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import {
+  consultaLotesFeatureKey,
+  consultaLotesReducer,
+} from './feature/outros-creditos-debitos/store/consulta-lotes.reducer';
 
 describe('AppComponent', () => {
   beforeEach(async () => {
+    registerLocaleData(localePt);
     await TestBed.configureTestingModule({
       imports: [AppComponent],
-      providers: [provideStore(), provideNoopAnimations()],
+      providers: [
+        provideStore({ [consultaLotesFeatureKey]: consultaLotesReducer }),
+        provideNoopAnimations(),
+        { provide: LOCALE_ID, useValue: 'pt-BR' },
+      ],
       schemas: [NO_ERRORS_SCHEMA],
       teardown: { destroyAfterEach: false }, // Opcional, para evitar problemas de limpeza
     })
