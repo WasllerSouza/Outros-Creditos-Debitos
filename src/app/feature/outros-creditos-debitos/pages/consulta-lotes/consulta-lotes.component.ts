@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { AsyncPipe, CommonModule } from '@angular/common';
 import { NonNullableFormBuilder, ReactiveFormsModule } from '@angular/forms';
@@ -15,10 +16,11 @@ import { DynamicDialogModule, DynamicDialogRef, DialogService } from 'primeng/dy
 import { MessageService } from 'primeng/api';
 import { MenuItem } from 'primeng/api';
 import { MenuModule } from 'primeng/menu';
+import { Subject, debounceTime, timer } from 'rxjs';
 import { ToastModule } from 'primeng/toast';
 
 import { ConsultaLotesActions } from '../../store/consulta-lotes.actions';
-import { filtroInicial, Lote } from '../../store/consulta-lotes.models';
+import { filtroInicial, FiltroPesquisa, Lote } from '../../store/consulta-lotes.models';
 import {
   selectLinhasPorPagina,
   selectLoading,
@@ -67,6 +69,10 @@ export class ConsultaLotesPageComponent {
 
   private readonly store = inject(Store);
 
+  private readonly destroyRef = inject(DestroyRef);
+
+  private readonly pesquisa$ = new Subject<FiltroPesquisa>();
+
   readonly loading$ = this.store.select(selectLoading);
 
   readonly paginaAtual$ = this.store.select(selectPaginaAtual);
@@ -108,10 +114,14 @@ export class ConsultaLotesPageComponent {
 
   ref: DynamicDialogRef | undefined;
 
+  constructor() {
+    this.pesquisa$
+      .pipe(debounceTime(300), takeUntilDestroyed(this.destroyRef))
+      .subscribe((filtro) => this.executarPesquisa(filtro));
+  }
+
   pesquisar(): void {
-    this.store.dispatch(
-      ConsultaLotesActions.pesquisar({ filtro: this.form.getRawValue() }),
-    );
+    this.pesquisa$.next(this.form.getRawValue());
   }
 
   limparFiltros(): void {
@@ -199,5 +209,19 @@ export class ConsultaLotesPageComponent {
       summary: 'Ação ainda não disponível',
       detail: `${acao} será disponibilizada em uma próxima etapa.`,
     });
+  }
+
+  private executarPesquisa(filtro: FiltroPesquisa): void {
+    if (filtro.instituicao.trim().toLowerCase() === 'erro') {
+      const erro = 'Falha simulada ao pesquisar lotes. Tente novamente.';
+      this.store.dispatch(ConsultaLotesActions.pesquisaFalhou({ erro }));
+      this.messageService.add({ severity: 'error', summary: 'Pesquisa indisponível', detail: erro });
+      return;
+    }
+
+    this.store.dispatch(ConsultaLotesActions.pesquisar({ filtro }));
+    timer(350)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => this.store.dispatch(ConsultaLotesActions.pesquisaConcluida()));
   }
 }

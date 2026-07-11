@@ -21,6 +21,7 @@ describe('ConsultaLotesPageComponent', () => {
   let messageService: { add: jest.Mock };
 
   beforeEach(() => {
+    jest.useFakeTimers();
     store = { select: jest.fn(() => of(null)), dispatch: jest.fn() };
     onClose = new Subject<Lancamento[] | undefined>();
     dialogService = {
@@ -54,12 +55,36 @@ describe('ConsultaLotesPageComponent', () => {
     expect(store.select).toHaveBeenCalledTimes(6);
   });
 
-  it('dispatches a search using the form values', () => {
+  it('debounces the search and toggles its loading lifecycle', () => {
     component.form.patchValue({ instituicao: 'Sicoob', valorInicial: 10 });
     component.pesquisar();
+    component.pesquisar();
+
+    expect(store.dispatch).not.toHaveBeenCalled();
+    jest.advanceTimersByTime(300);
 
     expect(store.dispatch).toHaveBeenCalledWith(
       ConsultaLotesActions.pesquisar({ filtro: component.form.getRawValue() }),
+    );
+
+    jest.advanceTimersByTime(350);
+    expect(store.dispatch).toHaveBeenLastCalledWith(
+      ConsultaLotesActions.pesquisaConcluida(),
+    );
+  });
+
+  it('handles a simulated search error without changing the layout', () => {
+    component.form.patchValue({ instituicao: 'erro' });
+    component.pesquisar();
+    jest.advanceTimersByTime(300);
+
+    expect(store.dispatch).toHaveBeenCalledWith(
+      ConsultaLotesActions.pesquisaFalhou({
+        erro: 'Falha simulada ao pesquisar lotes. Tente novamente.',
+      }),
+    );
+    expect(messageService.add).toHaveBeenCalledWith(
+      expect.objectContaining({ severity: 'error' }),
     );
   });
 
