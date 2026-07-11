@@ -169,12 +169,12 @@ export class IncluirLancamentoComponent {
     const values = this.form.getRawValue();
     const lancamento: Lancamento = {
       id: this.proximoId++,
-      contaCorrente: values.contaCorrente ?? '',
+      contaCorrente: values.contaCorrente!,
       titular: this.titularConta,
-      pa: values.pa ?? '',
-      valor: values.valor ?? 0,
-      historico: values.historico ?? '',
-      documento: values.documento ?? '',
+      pa: values.pa!,
+      valor: values.valor!,
+      historico: values.historico!,
+      documento: values.documento!,
       situacao: 'Pendente',
     };
     this.lancamentos = [...this.lancamentos, lancamento];
