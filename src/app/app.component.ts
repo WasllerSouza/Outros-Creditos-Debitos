@@ -2,17 +2,20 @@ import { Component, inject, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { ConsultaLotesPageComponent } from './feature/outros-creditos-debitos/pages/consulta-lotes/consulta-lotes.component';
 import { PrimeNGConfig } from 'primeng/api';
+import { ButtonModule } from 'primeng/button';
+import { SidebarModule } from 'primeng/sidebar';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, ConsultaLotesPageComponent],
+  imports: [RouterOutlet, ButtonModule, SidebarModule, ConsultaLotesPageComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
 export class AppComponent implements OnInit {
   title = 'outros-creditos-debitos';
   readonly config: PrimeNGConfig = inject(PrimeNGConfig);
+  menuAberto = false;
 
   ngOnInit() {
     this.config.setTranslation({

@@ -1,0 +1,390 @@
+<form
+  [formGroup]="form"
+  class="lancamento-form"
+  (ngSubmit)="incluirLancamento()"
+>
+  <div class="flex justify-content-between align-items-center">
+    <h2 class="p-dialog-header">
+      {{ tituloModal }}
+      @if (lancamentos.length) {
+        <span class="text-600 text-sm">
+          ({{ lancamentos.length }} lançamento(s) incluído(s))
+        </span>
+      }
+    </h2>
+    <button
+      type="button"
+      pButton
+      icon="pi pi-times"
+      class="p-button-text p-button-rounded p-button-secondary"
+      aria-label="Fechar modal"
+      (click)="fecharModal()"
+    ></button>
+  </div>
+  <fieldset class="section-card">
+    <legend>Conta Corrente</legend>
+    <div class="grid p-fluid">
+      <div class="col-12 md:col-7 field">
+        <label for="contaCorrente"
+          >Conta Corrente <span class="required">*</span></label
+        >
+        <div class="p-inputgroup">
+          <input
+            id="contaCorrente"
+            pInputText
+            placeholder="Número"
+            formControlName="contaCorrente"
+          /><button
+            type="button"
+            pButton
+            icon="pi pi-search"
+            class="p-button"
+            aria-label="Pesquisar conta corrente"
+            (click)="abrirBuscaConta()"
+          ></button>
+        </div>
+        @if (titularConta) {
+          <small class="text-600">{{ titularConta }}</small>
+        }
+        @if (
+          form.controls.contaCorrente.touched &&
+          form.controls.contaCorrente.invalid
+        ) {
+          <small class="p-error">Informe a conta corrente.</small>
+        }
+      </div>
+      <div class="col-12 md:col-5 field">
+        <label for="valor">Valor <span class="required">*</span></label
+        ><p-inputNumber
+          inputId="valor"
+          formControlName="valor"
+          mode="currency"
+          currency="BRL"
+          locale="pt-BR"
+          [minFractionDigits]="2"
+          [min]="0.01"
+          placeholder="R$ 0,00"
+        ></p-inputNumber>
+        @if (form.controls.valor.touched && form.controls.valor.invalid) {
+          <small class="p-error">Informe um valor maior que zero.</small>
+        }
+      </div>
+      <div class="col-12 md:col-8 field">
+        <label for="historico">Histórico <span class="required">*</span></label
+        ><p-dropdown
+          inputId="historico"
+          [options]="historicos"
+          placeholder="Selecione o histórico"
+          formControlName="historico"
+          appendTo="body"
+        ></p-dropdown>
+        @if (
+          form.controls.historico.touched && form.controls.historico.invalid
+        ) {
+          <small class="p-error">Selecione o histórico.</small>
+        }
+      </div>
+      <div class="col-12 md:col-4 field flex align-items-end pb-2">
+        <div>
+          <p-checkbox
+            inputId="estorno"
+            [binary]="true"
+            formControlName="estorno"
+          ></p-checkbox
+          ><label for="estorno" class="ml-2 mb-0">Estorno</label>
+        </div>
+      </div>
+      <div class="col-12 md:col-5 field">
+        <label for="documento">Documento <span class="required">*</span></label
+        ><input id="documento" pInputText formControlName="documento" />
+        @if (
+          form.controls.documento.touched && form.controls.documento.invalid
+        ) {
+          <small class="p-error">Informe o documento.</small>
+        }
+      </div>
+      <div class="col-12 md:col-7 field">
+        <label for="situacao">Situação</label
+        ><input id="situacao" pInputText formControlName="situacao" />
+      </div>
+      <div class="col-12 field">
+        <label for="descricao">Descrição</label
+        ><textarea
+          id="descricao"
+          rows="2"
+          pInputTextarea
+          [autoResize]="true"
+          formControlName="descricao"
+        ></textarea>
+      </div>
+    </div>
+  </fieldset>
+  <fieldset class="section-card">
+    <legend>Documento CSC</legend>
+    <div class="grid p-fluid">
+      <div class="col-12 md:col-6 field">
+        <label for="pa"
+          >PA — Ponto de Atendimento <span class="required">*</span></label
+        ><p-dropdown
+          inputId="pa"
+          [options]="pas"
+          optionLabel="label"
+          optionValue="value"
+          placeholder="Selecione cooperativa/agência"
+          formControlName="pa"
+          appendTo="body"
+        ></p-dropdown>
+        @if (form.controls.pa.touched && form.controls.pa.invalid) {
+          <small class="p-error">Selecione o ponto de atendimento.</small>
+        }
+      </div>
+      <div class="col-12 md:col-6 field">
+        <label for="idEvento">ID Evento</label>
+        <div class="p-inputgroup">
+          <input id="idEvento" pInputText formControlName="idEvento" /><button
+            type="button"
+            pButton
+            icon="pi pi-search"
+            class="p-button"
+            aria-label="Pesquisar evento"
+            (click)="abrirBuscaEvento()"
+          ></button>
+        </div>
+        @if (descricaoEvento) {
+          <small class="text-600">{{ descricaoEvento }}</small>
+        }
+      </div>
+      <div class="col-12 md:col-8 field">
+        <label for="complHistorico">Compl. Histórico</label
+        ><textarea
+          id="complHistorico"
+          rows="2"
+          pInputTextarea
+          [autoResize]="true"
+          formControlName="complHistorico"
+        ></textarea>
+      </div>
+      <div class="col-12 md:col-4 field">
+        <label for="idDocCsc">ID Doc CSC</label
+        ><input id="idDocCsc" pInputText formControlName="idDocCsc" />
+      </div>
+      <div class="col-12 md:col-8 field">
+        <label for="situacaoCsc">Situação</label
+        ><input id="situacaoCsc" pInputText formControlName="situacaoCsc" />
+      </div>
+    </div>
+  </fieldset>
+  <fieldset class="section-card">
+    <legend>Lançamentos do lote</legend>
+    <p-table
+      [value]="lancamentos"
+      [(selection)]="lancamentoSelecionado"
+      dataKey="id"
+      responsiveLayout="scroll"
+      styleClass="p-datatable-sm"
+      ><ng-template pTemplate="header"
+        ><tr>
+          <th scope="col" class="select-column" aria-label="Seleção"></th>
+          <th scope="col">ID</th>
+          <th scope="col">PA</th>
+          <th scope="col">Conta Corrente</th>
+          <th scope="col">Histórico</th>
+          <th scope="col">Valor</th>
+          <th scope="col">Situação</th>
+        </tr></ng-template
+      ><ng-template pTemplate="body" let-lancamento
+        ><tr [pSelectableRow]="lancamento">
+          <td>
+            <p-tableRadioButton [value]="lancamento"></p-tableRadioButton>
+          </td>
+          <td>{{ lancamento.id }}</td>
+          <td>{{ lancamento.pa }}</td>
+          <td>{{ lancamento.contaCorrente }}</td>
+          <td>{{ lancamento.historico }}</td>
+          <td>
+            {{
+              lancamento.valor | currency: "BRL" : "symbol" : "1.2-2" : "pt-BR"
+            }}
+          </td>
+          <td>{{ lancamento.situacao }}</td>
+        </tr></ng-template
+      ><ng-template pTemplate="emptymessage"
+        ><tr>
+          <td colspan="7">Nenhum lançamento incluído.</td>
+        </tr></ng-template
+      ></p-table
+    >
+    <div class="flex flex-wrap justify-content-end gap-2 mt-3">
+      <button
+        type="button"
+        pButton
+        label="Visualizar"
+        class="p-button-outlined p-button-secondary"
+        [disabled]="!lancamentoSelecionado"
+      ></button
+      ><button type="submit" pButton label="Incluir"></button
+      ><button
+        type="button"
+        pButton
+        label="Alterar"
+        class="p-button-outlined p-button-secondary"
+        [disabled]="!lancamentoSelecionado"
+        (click)="alterarLancamento()"
+      ></button
+      ><button
+        type="button"
+        pButton
+        label="Excluir"
+        class="p-button-outlined p-button-secondary"
+        [disabled]="!lancamentoSelecionado"
+        (click)="excluirLancamento()"
+      ></button
+      ><button
+        type="button"
+        pButton
+        label="Duplicar"
+        class="p-button-outlined p-button-secondary"
+        [disabled]="!lancamentoSelecionado"
+        (click)="duplicarLancamento()"
+      ></button>
+    </div>
+  </fieldset>
+  <div class="flex flex-wrap justify-content-end gap-2 pt-2">
+    <button
+      type="button"
+      pButton
+      label="Fechar"
+      class="p-button"
+      (click)="fecharModal()"
+    ></button
+    ><button
+      type="button"
+      pButton
+      label="Concluir"
+      [disabled]="form.invalid && !lancamentos.length"
+      (click)="finalizar()"
+    ></button>
+  </div>
+</form>
+<p-dialog
+  [(visible)]="buscaContaVisivel"
+  [modal]="true"
+  [draggable]="false"
+  [showHeader]="false"
+  [style]="{ width: 'min(52rem, 95vw)' }"
+>
+  <div class="flex justify-content-between align-items-center">
+    <h3 class="p-dialog-header">Pesquisa Conta Corrente</h3>
+    <button
+      type="button"
+      pButton
+      icon="pi pi-times"
+      class="p-button-text p-button-rounded p-button-secondary"
+      aria-label="Fechar pesquisa de conta"
+      (click)="buscaContaVisivel = false"
+    ></button>
+  </div>
+  <label for="buscaConta" class="font-bold"> Valor </label>
+  <div class="p-inputgroup mt-2">
+    <input
+      id="buscaConta"
+      pInputText
+      [(ngModel)]="termoBuscaConta"
+      [ngModelOptions]="{ standalone: true }"
+      placeholder="Filtre qualquer coluna"
+    /><button type="button" pButton label="Listar" icon="pi pi-search"></button>
+  </div>
+  <p-table
+    [value]="contasFiltradas"
+    responsiveLayout="scroll"
+    styleClass="p-datatable-sm mt-3"
+    ><ng-template pTemplate="header"
+      ><tr>
+        <th scope="col">Conta Corrente</th>
+        <th scope="col">Titular</th>
+        <th scope="col">Cooperativa</th>
+        <th scope="col" aria-label="Ações"></th></tr></ng-template
+    ><ng-template pTemplate="body" let-conta
+      ><tr>
+        <td>{{ conta.numero }}</td>
+        <td>{{ conta.titular }}</td>
+        <td>{{ conta.cooperativa }}</td>
+        <td>
+          <button
+            type="button"
+            pButton
+            label="Selecionar"
+            class="p-button-sm"
+            (click)="selecionarConta(conta)"
+          ></button>
+        </td></tr></ng-template
+    ><ng-template pTemplate="emptymessage"
+      ><tr>
+        <td colspan="4">Nenhuma conta encontrada.</td>
+      </tr></ng-template
+    ></p-table
+  ></p-dialog
+>
+<p-dialog
+  [(visible)]="buscaEventoVisivel"
+  [modal]="true"
+  [draggable]="false"
+  [showHeader]="false"
+  [style]="{ width: 'min(58rem, 95vw)' }"
+>
+  <div class="flex justify-content-between align-items-center">
+    <h3 class="p-dialog-header">Pesquisa Evento</h3>
+    <button
+      type="button"
+      pButton
+      icon="pi pi-times"
+      class="p-button-text p-button-rounded p-button-secondary"
+      aria-label="Fechar pesquisa de evento"
+      (click)="buscaEventoVisivel = false"
+    ></button>
+  </div>
+  <label for="buscaEvento" class="font-bold"> Valor </label>
+  <div class="p-inputgroup mt-2">
+    <input
+      id="buscaEvento"
+      pInputText
+      [(ngModel)]="termoBuscaEvento"
+      [ngModelOptions]="{ standalone: true }"
+      placeholder="Filtre qualquer coluna"
+    /><button type="button" pButton label="Listar" icon="pi pi-search"></button>
+  </div>
+  <p-table
+    [value]="eventosFiltrados"
+    responsiveLayout="scroll"
+    styleClass="p-datatable-sm mt-3"
+    ><ng-template pTemplate="header"
+      ><tr>
+        <th scope="col">ID Evento</th>
+        <th scope="col">Cód. Evento</th>
+        <th scope="col">Descrição</th>
+        <th scope="col">Dt. início</th>
+        <th scope="col">Dt. fim</th>
+        <th scope="col" aria-label="Ações"></th></tr></ng-template
+    ><ng-template pTemplate="body" let-evento
+      ><tr>
+        <td>{{ evento.id }}</td>
+        <td>{{ evento.codigo }}</td>
+        <td>{{ evento.descricao }}</td>
+        <td>{{ evento.dataInicio }}</td>
+        <td>{{ evento.dataFim || "-" }}</td>
+        <td>
+          <button
+            type="button"
+            pButton
+            label="Selecionar"
+            class="p-button-sm"
+            (click)="selecionarEvento(evento)"
+          ></button>
+        </td></tr></ng-template
+    ><ng-template pTemplate="emptymessage"
+      ><tr>
+        <td colspan="6">Nenhum evento encontrado.</td>
+      </tr></ng-template
+    ></p-table
+  ></p-dialog
+>

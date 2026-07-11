@@ -11,6 +11,11 @@ import { InputTextModule } from 'primeng/inputtext';
 import { PaginatorModule } from 'primeng/paginator';
 import { PanelModule } from 'primeng/panel';
 import { TableModule } from 'primeng/table';
+import { DynamicDialogModule, DynamicDialogRef, DialogService } from 'primeng/dynamicdialog';
+import { MessageService } from 'primeng/api';
+import { MenuItem } from 'primeng/api';
+import { MenuModule } from 'primeng/menu';
+import { ToastModule } from 'primeng/toast';
 
 import { ConsultaLotesActions } from '../../store/consulta-lotes.actions';
 import { filtroInicial, Lote } from '../../store/consulta-lotes.models';
@@ -23,6 +28,10 @@ import {
   selectPossuiUmSelecionado,
 } from '../../store/consulta-lotes.selectors';
 import { ZeroEsquerdaPipe } from '../../../../shared/pipes/zero-esquerda.pipe';
+import {
+  IncluirLancamentoComponent,
+  Lancamento,
+} from '../../../../shared/components/incluir-lancamento/incluir-lancamento.component';
 
 @Component({
   selector: 'app-consulta-lotes',
@@ -41,7 +50,11 @@ import { ZeroEsquerdaPipe } from '../../../../shared/pipes/zero-esquerda.pipe';
     PanelModule,
     TableModule,
     ZeroEsquerdaPipe,
+    DynamicDialogModule,
+    ToastModule,
+    MenuModule,
   ],
+  providers: [DialogService, MessageService],
 
   templateUrl: './consulta-lotes.component.html',
 
@@ -68,6 +81,16 @@ export class ConsultaLotesPageComponent {
 
   readonly situacoes = ['Todas', 'Aberto', 'Enviado', 'Confirmado'];
 
+  readonly acoesMenu: MenuItem[] = [
+    { label: 'Confirmar', icon: 'pi pi-check', command: () => this.confirmar() },
+    { label: 'Enviar', icon: 'pi pi-send', command: () => this.enviar() },
+    { label: 'Visualizar justificativa', icon: 'pi pi-file', command: () => this.visualizarJustificativa() },
+    { separator: true },
+    { label: 'Alterar', icon: 'pi pi-pencil', command: () => this.alterar() },
+    { label: 'Excluir', icon: 'pi pi-trash', command: () => this.excluir() },
+    { label: 'Visualizar', icon: 'pi pi-eye', command: () => this.visualizar() },
+  ];
+
   readonly form = this.fb.group({
     instituicaoResponsavel: [filtroInicial.instituicaoResponsavel],
     instituicao: [filtroInicial.instituicao],
@@ -78,6 +101,12 @@ export class ConsultaLotesPageComponent {
     valorFinal: [filtroInicial.valorFinal],
     dataRange: [filtroInicial.dataRange],
   });
+
+  private readonly dialogService = inject(DialogService);
+
+  private readonly messageService = inject(MessageService);
+
+  ref: DynamicDialogRef | undefined;
 
   pesquisar(): void {
     this.store.dispatch(
@@ -99,30 +128,76 @@ export class ConsultaLotesPageComponent {
   }
 
   incluir(): void {
-    console.log('Incluir');
+    this.ref = this.dialogService.open(IncluirLancamentoComponent, {
+      header: 'INCLUIR LANÇAMENTO',
+      width: 'min(72rem, 96vw)',
+      showHeader: false,
+      contentStyle: { overflow: 'auto', 'max-height': '78vh' },
+      baseZIndex: 10000,
+    });
+
+    this.ref.onClose.subscribe((lancamentos: Lancamento[] | undefined) => {
+      if (!lancamentos?.length) return;
+
+      const agora = new Date();
+      const data = agora.toLocaleDateString('pt-BR');
+      const hora = agora.toLocaleTimeString('pt-BR', {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+      });
+      const pa = lancamentos[0].pa;
+
+      this.store.dispatch(
+        ConsultaLotesActions.incluirLote({
+          lote: {
+            instituicaoResponsavel: `${pa} - Ponto de Atendimento`,
+            instituicao: '0002 - SICOOB CENTRAL',
+            dataEntrada: data,
+            valor: lancamentos.reduce(
+              (total, lancamento) => total + lancamento.valor,
+              0,
+            ),
+            quantidadeLancamentos: lancamentos.length,
+            usuarioRegistro: 'usuario-atual',
+            usuarioAprovacao: '',
+            situacao: 'Aberto',
+            dataHoraSituacao: `${data}, ${hora}`,
+          },
+        }),
+      );
+    });
   }
 
   alterar(): void {
-    console.log('Alterar');
+    this.informarAcaoIndisponivel('Alterar');
   }
 
   excluir(): void {
-    console.log('Excluir');
+    this.informarAcaoIndisponivel('Excluir');
   }
 
   visualizar(): void {
-    console.log('Visualizar');
+    this.informarAcaoIndisponivel('Visualizar');
   }
 
   confirmar(): void {
-    console.log('Confirmar');
+    this.informarAcaoIndisponivel('Confirmar');
   }
 
   enviar(): void {
-    console.log('Enviar');
+    this.informarAcaoIndisponivel('Enviar');
   }
 
   visualizarJustificativa(): void {
-    console.log('Visualizar justificativa');
+    this.informarAcaoIndisponivel('Visualizar justificativa');
+  }
+
+  private informarAcaoIndisponivel(acao: string): void {
+    this.messageService.add({
+      severity: 'info',
+      summary: 'Ação ainda não disponível',
+      detail: `${acao} será disponibilizada em uma próxima etapa.`,
+    });
   }
 }

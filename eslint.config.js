@@ -51,6 +51,9 @@ module.exports = defineConfig([
       angular.configs.templateRecommended,
       angular.configs.templateAccessibility,
     ],
-    rules: {},
+    rules: {
+      // PrimeNG renders button labels from the pButton directive at runtime.
+      '@angular-eslint/template/elements-content': 'off',
+    },
   }
 ]);
