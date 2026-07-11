@@ -1,0 +1,62 @@
+name: CI
+
+on:
+  pull_request:
+    branches:
+      - main
+
+  push:
+    branches:
+      - develop
+      - main
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+
+  quality:
+
+    name: Build • Test • Sonar
+
+    runs-on: ubuntu-latest
+
+    timeout-minutes: 30
+
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Execute Unit Tests
+        run: npm run test -- --watch=false --coverage --silent
+
+      - name: Build Angular
+        run: npm run build -- --configuration production
+
+      - name: SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@v4
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+
+      - name: Sonar Quality Gate
+        uses: SonarSource/sonarqube-quality-gate-action@v1.2.0
+        timeout-minutes: 10
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
