@@ -10,44 +10,103 @@ permissions:
   pull-requests: write
 
 jobs:
-
   create-pr:
-
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Garante a busca de todo o histórico para localizar as tags de release
+          fetch-depth: 0
 
       - name: Create or Update PR Main
         env:
           GH_TOKEN: ${{ secrets.MIRANTE_ACTIONS_PAT_SICOOB }}
         run: |
-          # 1. Captura a tag/versão da release mais recente (ex: v1.2.0)
-          # Se não houver releases criadas, ele adota "v1.0.0" como fallback padrão
-          RELEASE_VERSION=$(gh release list --limit 1 --json tagName --jq '.[0].tagName' 2>/dev/null || echo "v1.0.0")
+          set -euo pipefail
 
-          if [ -z "$RELEASE_VERSION" ] || [ "$RELEASE_VERSION" = "null" ]; then
-            RELEASE_VERSION="v1.0.0"
+          git fetch origin main develop --tags --force
+
+          # A última PR mergeada na main delimita os commits que pertencem à
+          # próxima release. Sem PR anterior, usamos o ponto comum das branches.
+          LAST_MERGED_PR=$(gh pr list --base main --state merged --limit 1 \
+            --json number,mergedAt,mergeCommit,commits \
+            --jq 'sort_by(.mergedAt) | last // empty')
+          LAST_MERGED_PR_NUMBER=$(echo "$LAST_MERGED_PR" | jq -r '.number // empty')
+          LAST_MERGED_SHA=$(echo "$LAST_MERGED_PR" | jq -r '.mergeCommit.oid // empty')
+          LAST_MERGED_HEAD_SHA=$(echo "$LAST_MERGED_PR" | jq -r '.commits[-1].oid // empty')
+
+          # Em merge por squash, a hash do merge não é ancestral da develop.
+          # O último commit original da PR continua sendo o marco correto.
+          if [ -n "$LAST_MERGED_HEAD_SHA" ] && git merge-base --is-ancestor "$LAST_MERGED_HEAD_SHA" origin/develop; then
+            BASE_SHA="$LAST_MERGED_HEAD_SHA"
+            BASE_DESCRIPTION="último commit da PR #${LAST_MERGED_PR_NUMBER} mergeada na main"
+          elif [ -n "$LAST_MERGED_SHA" ] && git merge-base --is-ancestor "$LAST_MERGED_SHA" origin/develop; then
+            BASE_SHA="$LAST_MERGED_SHA"
+            BASE_DESCRIPTION="PR #${LAST_MERGED_PR_NUMBER} mergeada na main"
+          else
+            BASE_SHA=$(git merge-base origin/main origin/develop)
+            BASE_DESCRIPTION="ponto comum entre main e develop"
           fi
 
-          echo "Versão da Release identificada: $RELEASE_VERSION"
+          COMMIT_RANGE="${BASE_SHA}..origin/develop"
+          COMMIT_MESSAGES=$(git log --format='%B' "$COMMIT_RANGE")
+          COMMIT_COUNT=$(git rev-list --count "$COMMIT_RANGE")
 
-          # 2. Verifica se já existe um PR aberto de 'develop' para 'main'
-          PR_EXISTS=$(gh pr list --head "develop" --base "main" --json number --jq '.[0].number' 2>/dev/null)
+          if [ "$COMMIT_COUNT" -eq 0 ]; then
+            echo "Não há commits novos de develop para main. Nenhuma PR de release será criada."
+            exit 0
+          fi
 
-          # 3. Executa a lógica condicional para não quebrar a esteira de CI
-          if [ -n "$PR_EXISTS" ] && [ "$PR_EXISTS" != "null" ]; then
-            echo "PR #${PR_EXISTS} já está aberto. Atualizando título e metadados..."
-            gh pr edit "$PR_EXISTS" \
-              --title "Release ($RELEASE_VERSION)" \
-              --body "PR automático atualizado via pipeline de CI."
+          # A versão base é a maior tag semântica já alcançada pela main.
+          # Mantém v1.0.0 como fallback para repositórios ainda sem tags.
+          BASE_VERSION=$(git tag --merged origin/main --sort=-version:refname \
+            | grep -E '^v?[0-9]+\.[0-9]+\.[0-9]+$' \
+            | head -n 1 || true)
+          BASE_VERSION=${BASE_VERSION:-v1.0.0}
+          BASE_VERSION="v${BASE_VERSION#v}"
+
+          if printf '%s\n' "$COMMIT_MESSAGES" | grep -Eq '(^[a-z]+(\([^)]+\))?!:|BREAKING CHANGE:)'; then
+            BUMP_TYPE="major"
+          elif printf '%s\n' "$COMMIT_MESSAGES" | grep -Eq '^feat(\([^)]+\))?:'; then
+            BUMP_TYPE="minor"
           else
-            echo "Nenhum PR aberto encontrado de develop para main. Criando novo..."
+            # fix, perf, refactor e commits sem tipo convencional geram patch.
+            BUMP_TYPE="patch"
+          fi
+
+          VERSION_NUMBERS=${BASE_VERSION#v}
+          IFS='.' read -r MAJOR MINOR PATCH <<< "$VERSION_NUMBERS"
+          case "$BUMP_TYPE" in
+            major) MAJOR=$((MAJOR + 1)); MINOR=0; PATCH=0 ;;
+            minor) MINOR=$((MINOR + 1)); PATCH=0 ;;
+            patch) PATCH=$((PATCH + 1)) ;;
+          esac
+          RELEASE_VERSION="v${MAJOR}.${MINOR}.${PATCH}"
+
+          echo "Marco analisado: ${BASE_DESCRIPTION} (${BASE_SHA})"
+          echo "Commits analisados: ${COMMIT_COUNT}"
+          echo "Versão base: ${BASE_VERSION}; incremento: ${BUMP_TYPE}; próxima versão: ${RELEASE_VERSION}"
+
+          PR_BODY=$(cat <<EOF
+          PR automático de release.
+
+          - Versão base: ${BASE_VERSION}
+          - Incremento convencional: ${BUMP_TYPE}
+          - Marco de commits: ${BASE_DESCRIPTION}
+          - Commits analisados: ${COMMIT_COUNT}
+          EOF
+          )
+
+          PR_EXISTS=$(gh pr list --head develop --base main --state open --json number --jq '.[0].number')
+
+          if [ -n "$PR_EXISTS" ] && [ "$PR_EXISTS" != "null" ]; then
+            echo "PR #${PR_EXISTS} já está aberta. Atualizando título e metadados..."
+            gh pr edit "$PR_EXISTS" --title "Release (${RELEASE_VERSION})" --body "$PR_BODY"
+          else
+            echo "Nenhuma PR aberta encontrada de develop para main. Criando nova PR..."
             gh pr create \
               --base main \
               --head develop \
-              --title "Release ($RELEASE_VERSION)" \
-              --body "PR automático gerado pelo fluxo de CI."
+              --title "Release (${RELEASE_VERSION})" \
+              --body "$PR_BODY"
           fi
