@@ -1,3 +1,4 @@
+<p-toast></p-toast>
 <section class="flex flex-column gap-3">
   <div
     class="surface-card border-1 border-200 border-round-lg shadow-3 p-3 md:p-5"
@@ -64,7 +65,7 @@
               <label for="idInicial" class="font-bold text-sm text-900"
                 >ID Lote</label
               >
-              <div class="flex align-items-center gap-2">
+              <div class="range-fields flex align-items-center gap-2">
                 <input
                   id="idInicial"
                   type="text"
@@ -90,7 +91,7 @@
               <label for="valorInicial" class="font-bold text-sm text-900"
                 >Valor Lote</label
               >
-              <div class="flex align-items-center gap-2">
+              <div class="range-fields flex align-items-center gap-2">
                 <input
                   type="text"
                   id="valorInicial"
@@ -168,7 +169,7 @@
       role="toolbar"
       aria-label="Ações do lote"
     >
-      <div class="flex flex-wrap align-items-center gap-2 w-full mt-3">
+      <div class="action-buttons flex flex-wrap align-items-center gap-2 w-full mt-3">
         <button
           type="button"
           pButton
@@ -237,6 +238,11 @@
           [raised]="true"
           (click)="visualizar()"
         ></button>
+      </div>
+      <div class="action-menu mt-3">
+        <button type="button" pButton label="INCLUIR" icon="pi pi-plus" class="flex-1" (click)="incluir()"></button>
+        <button type="button" pButton label="AÇÕES" icon="pi pi-ellipsis-v" class="p-button-outlined p-button-secondary" (click)="menuAcoes.toggle($event)"></button>
+        <p-menu #menuAcoes [model]="acoesMenu" [popup]="true" appendTo="body"></p-menu>
       </div>
     </div>
 
