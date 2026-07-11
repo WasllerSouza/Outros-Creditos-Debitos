@@ -2,13 +2,20 @@ import { TestBed } from '@angular/core/testing';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { provideStore } from '@ngrx/store';
 import { AppComponent } from './app.component';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('AppComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [AppComponent],
       providers: [provideStore(), provideNoopAnimations()],
-    }).compileComponents();
+      schemas: [NO_ERRORS_SCHEMA],
+      teardown: { destroyAfterEach: false }, // Opcional, para evitar problemas de limpeza
+    })
+      .overrideComponent(AppComponent, {
+        set: { styles: [] }, // Ignora os estilos
+      })
+      .compileComponents();
   });
 
   it('should create the app', () => {

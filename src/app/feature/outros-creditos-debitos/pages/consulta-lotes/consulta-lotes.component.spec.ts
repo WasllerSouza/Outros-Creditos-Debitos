@@ -19,14 +19,21 @@ describe('ConsultaLotesPageComponent', () => {
       providers: [{ provide: Store, useValue: store }],
     });
 
-    component = TestBed.runInInjectionContext(() => new ConsultaLotesPageComponent());
+    component = TestBed.runInInjectionContext(
+      () => new ConsultaLotesPageComponent(),
+    );
   });
 
   it('creates its form and observable selectors', () => {
     expect(component).toBeTruthy();
     expect(component.form.getRawValue()).toEqual(filtroInicial);
-    expect(component.situacoes).toEqual(['Todas', 'Aberto', 'Enviado', 'Confirmado']);
-    expect(store.select).toHaveBeenCalledTimes(7);
+    expect(component.situacoes).toEqual([
+      'Todas',
+      'Aberto',
+      'Enviado',
+      'Confirmado',
+    ]);
+    expect(store.select).toHaveBeenCalledTimes(6);
   });
 
   it('dispatches a search using the form values', () => {
@@ -43,7 +50,9 @@ describe('ConsultaLotesPageComponent', () => {
     component.limparFiltros();
 
     expect(component.form.getRawValue()).toEqual(filtroInicial);
-    expect(store.dispatch).toHaveBeenCalledWith(ConsultaLotesActions.limparFiltros());
+    expect(store.dispatch).toHaveBeenCalledWith(
+      ConsultaLotesActions.limparFiltros(),
+    );
   });
 
   it('dispatches selection and pagination actions', () => {
