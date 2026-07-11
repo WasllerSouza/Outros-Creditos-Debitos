@@ -1,27 +1,94 @@
-# OutrosCreditosDebitos
+# Outros Créditos/Débitos
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.17.
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=WasllerSouza_Outros-Creditos-Debitos&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=WasllerSouza_Outros-Creditos-Debitos)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=WasllerSouza_Outros-Creditos-Debitos&metric=bugs)](https://sonarcloud.io/summary/new_code?id=WasllerSouza_Outros-Creditos-Debitos)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=WasllerSouza_Outros-Creditos-Debitos&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=WasllerSouza_Outros-Creditos-Debitos)
+[![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=WasllerSouza_Outros-Creditos-Debitos&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=WasllerSouza_Outros-Creditos-Debitos)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=WasllerSouza_Outros-Creditos-Debitos&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=WasllerSouza_Outros-Creditos-Debitos)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=WasllerSouza_Outros-Creditos-Debitos&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=WasllerSouza_Outros-Creditos-Debitos)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=WasllerSouza_Outros-Creditos-Debitos&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=WasllerSouza_Outros-Creditos-Debitos)
+[![SonarQube Cloud](https://sonarcloud.io/images/project_badges/sonarcloud-light.svg)](https://sonarcloud.io/summary/new_code?id=WasllerSouza_Outros-Creditos-Debitos)
 
-## Development server
+Aplicação web para consulta e manutenção de lotes de outros créditos e débitos. A interface permite filtrar lotes, incluir lançamentos em memória e acompanhar os dados em uma grade responsiva.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+Desenvolvida com **Angular 17** e Angular CLI 17.3.
 
-## Code scaffolding
+## 🚀 Instruções de Instalação e Execução
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+### Pré-requisitos
 
-## Build
+- [Node.js](https://nodejs.org/) **20 LTS** (recomendado para este projeto Angular 17).
+- `npm`, instalado junto com o Node.js.
+- Git.
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+### Instalação
 
-## Running unit tests
+Clone o repositório e acesse a pasta do projeto:
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+```bash
+git clone <url-do-repositorio>
+cd Outros-Creditos-Debitos
+```
 
-## Running end-to-end tests
+Instale as dependências:
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+```bash
+npm install
+```
 
-## Further help
+Inicie o servidor de desenvolvimento:
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+```bash
+ng serve
+```
+
+O projeto estará disponível em [http://localhost:4200/](http://localhost:4200/). Como alternativa, é possível executar `npm start`.
+
+## 🛠️ Decisões Técnicas Relevantes
+
+### Arquitetura
+
+- Estrutura orientada a _features_, com o domínio principal em `src/app/feature/outros-creditos-debitos`.
+- Uso de **standalone components**, sem módulos Angular de feature.
+- Componentes reutilizáveis e pipes compartilhados ficam em `src/app/shared`.
+
+### Estado e fluxo de dados
+
+- **NgRx Store** centraliza os dados da consulta, filtros, seleção, paginação, carregamento e erros simulados.
+- O modal de lançamento agrega os itens em memória e, ao concluir, cria um novo lote no estado.
+- A pesquisa possui debounce de 300 ms, indicador de carregamento e cenário de falha simulada para o valor `erro` no campo **Instituição**.
+
+### Interface e responsividade
+
+- **PrimeNG** fornece os componentes de interface, diálogos, tabelas, menus e mensagens.
+- **PrimeFlex** é utilizado para o grid e utilitários responsivos.
+- A navegação lateral permanece no desktop, vira drawer no tablet e celular; as ações do lote são condensadas em menu nas telas menores.
+- Os estilos usam variáveis de tema do PrimeNG e tokens globais de aplicação definidos em `src/styles.scss`.
+
+### Qualidade e acessibilidade
+
+- Testes unitários com **Jest** e `jest-preset-angular`.
+- ESLint, Prettier e integração com **SonarCloud** para qualidade contínua.
+- Labels associados aos campos, atributos ARIA, cabeçalhos de tabela com `scope` e foco/fechamento por teclado nos diálogos.
+
+## ✅ Comandos Úteis
+
+```bash
+# Executa os testes unitários
+npm test
+
+# Gera relatório de cobertura
+npm run test:coverage
+
+# Executa o lint
+npm run lint
+
+# Gera o build de produção
+npm run build:production
+```
+
+## 📌 Links Úteis e Observações
+
+- Não há variáveis de ambiente obrigatórias para executar a aplicação localmente.
+- O relatório de cobertura é gerado em `coverage/lcov.info` e consumido pelo SonarCloud.
+- Os dados atuais são mocks locais; integrações com APIs podem ser adicionadas preservando o fluxo NgRx existente.
