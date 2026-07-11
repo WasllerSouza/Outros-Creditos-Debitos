@@ -1,4 +1,4 @@
-name: Auto PR Develop -> Main
+name: Release PR Automation
 
 on:
   push:
@@ -10,17 +10,44 @@ permissions:
   pull-requests: write
 
 jobs:
+
   create-pr:
+
     runs-on: ubuntu-latest
 
     steps:
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v7
+      - uses: actions/checkout@v4
         with:
-          token: ${{ secrets.MIRANTE_ACTIONS_PAT_SICOOB }}
-          base: main
-          branch: develop
-          title: "release: develop -> main"
-          body: |
-            PR automático para produção.
-          draft: false
+          fetch-depth: 0 # Garante a busca de todo o histórico para localizar as tags de release
+
+      - name: Create or Update PR Main
+        env:
+          GH_TOKEN: ${{ secrets.MIRANTE_ACTIONS_PAT_SICOOB }}
+        run: |
+          # 1. Captura a tag/versão da release mais recente (ex: v1.2.0)
+          # Se não houver releases criadas, ele adota "v1.0.0" como fallback padrão
+          RELEASE_VERSION=$(gh release list --limit 1 --json tagName --jq '.[0].tagName' 2>/dev/null || echo "v1.0.0")
+
+          if [ -z "$RELEASE_VERSION" ] || [ "$RELEASE_VERSION" = "null" ]; then
+            RELEASE_VERSION="v1.0.0"
+          fi
+
+          echo "Versão da Release identificada: $RELEASE_VERSION"
+
+          # 2. Verifica se já existe um PR aberto de 'develop' para 'main'
+          PR_EXISTS=$(gh pr list --head "develop" --base "main" --json number --jq '.[0].number' 2>/dev/null)
+
+          # 3. Executa a lógica condicional para não quebrar a esteira de CI
+          if [ -n "$PR_EXISTS" ] && [ "$PR_EXISTS" != "null" ]; then
+            echo "PR #${PR_EXISTS} já está aberto. Atualizando título e metadados..."
+            gh pr edit "$PR_EXISTS" \
+              --title "Release ($RELEASE_VERSION)" \
+              --body "PR automático atualizado via pipeline de CI."
+          else
+            echo "Nenhum PR aberto encontrado de develop para main. Criando novo..."
+            gh pr create \
+              --base main \
+              --head develop \
+              --title "Release ($RELEASE_VERSION)" \
+              --body "PR automático gerado pelo fluxo de CI."
+          fi

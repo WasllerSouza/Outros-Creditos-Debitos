@@ -1,9 +1,9 @@
-name: Auto PR Feature -> Develop
+name: Feature Branch PR Automation
 
 on:
   push:
     branches:
-      - 'feature/**'
+      - "feature/**"
 
 permissions:
   contents: write
@@ -14,16 +14,32 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v7
-        with:
-          token: ${{ secrets.MIRANTE_ACTIONS_PAT_SICOOB }}
-          base: develop
-          branch: ${{ github.ref_name }}
-          title: "feat: ${{ github.ref_name }}"
-          body: |
-            Pull Request criado automaticamente.
+      - uses: actions/checkout@v4
 
-            Origem: `${{ github.ref_name }}`
-            Destino: `develop`
-          draft: false
+      - name: Create or Update PR
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Captura o nome da branch atual que disparou o push dinamicamente
+          CURRENT_BRANCH="${{ github.ref_name }}"
+
+          # Verifica se já existe um PR aberto para a branch atual para develop
+          PR_EXISTS=$(gh pr list --head "$CURRENT_BRANCH" --base "develop" --json number --jq '.[0].number' 2>/dev/null)
+
+          if [ -n "$PR_EXISTS" ] && [ "$PR_EXISTS" != "null" ]; then
+            echo "PR #${PR_EXISTS} já existe. Atualizando metadados..."
+
+            # REMOVIDO A FLAG --head QUE CAUSAVA O ERRO
+            gh pr edit "$PR_EXISTS" \
+              --base develop \
+              --title "feat: $CURRENT_BRANCH" \
+              --body "PR atualizado automaticamente via CI."
+          else
+            echo "Nenhum PR encontrado. Criando um novo..."
+
+            gh pr create \
+              --base develop \
+              --head "$CURRENT_BRANCH" \
+              --title "feat: $CURRENT_BRANCH" \
+              --body "PR criado via pipeline."
+          fi

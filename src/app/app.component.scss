@@ -1,0 +1,139 @@
+.app-shell {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 74px minmax(0, 1fr);
+  background: #eef0f5;
+  color: #223536;
+}
+
+.sidebar {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  background: #ffffff;
+  border-top: 3px solid #006f6b;
+  border-right: 1px solid #d8dde2;
+  box-shadow: 4px 0 18px rgba(21, 42, 45, 0.08);
+  z-index: 2;
+}
+
+.sidebar__item {
+  min-height: 60px;
+  gap: 5px;
+  padding: 8px 6px;
+  color: #00756f;
+  font-size: 11px;
+  font-weight: 500;
+  text-decoration: none;
+  border-bottom: 1px solid #edf1f2;
+}
+
+.sidebar__item--active {
+  background: #f2fbfa;
+  box-shadow: inset 3px 0 0 #00756f;
+}
+
+.sidebar__icon {
+  width: 18px;
+  height: 18px;
+  border-radius: 3px;
+  background: #00756f;
+  color: #ffffff;
+  font-size: 13px;
+  line-height: 1;
+}
+
+.sidebar__label {
+  line-height: 1;
+}
+
+.app-shell__body {
+  min-width: 0;
+}
+
+.navbar {
+  min-height: 62px;
+  gap: 16px;
+  padding: 0 22px;
+  background: #ffffff;
+  border-top: 3px solid #006f6b;
+  border-bottom: 1px solid #d7dce2;
+  box-shadow: 0 3px 12px rgba(31, 45, 50, 0.1);
+  z-index: 1;
+}
+
+.navbar__title {
+  margin: 0 0 4px;
+  color: #00756f;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.navbar__breadcrumb {
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: #526264;
+  font-size: 12px;
+  line-height: 1.2;
+}
+
+.navbar__breadcrumb li + li::before {
+  content: ">";
+  margin-right: 6px;
+  color: #8a989a;
+}
+
+.navbar__breadcrumb a {
+  color: #00756f;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.navbar__action {
+  width: 20px;
+  height: 20px;
+  flex: 0 0 auto;
+  border: 1px solid #b5d4d2;
+  border-radius: 50%;
+  background: #f7fbfb;
+  color: #00756f;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.app-content {
+  min-width: 0;
+  padding: 12px 12px 24px;
+}
+
+@media (max-width: 720px) {
+  .app-shell {
+    grid-template-columns: 58px minmax(0, 1fr);
+  }
+
+  .sidebar__label {
+    font-size: 10px;
+  }
+
+  .navbar {
+    min-height: 58px;
+    padding: 0 14px;
+  }
+
+  .navbar__title {
+    font-size: 14px;
+  }
+
+  .navbar__breadcrumb {
+    font-size: 11px;
+  }
+
+  .app-content {
+    padding: 10px;
+  }
+}
