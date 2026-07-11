@@ -5,22 +5,43 @@
       href="#"
       aria-label="Contabil"
     >
-      <span class="sidebar__icon flex align-items-center justify-content-center">C</span>
+      <span class="sidebar__icon flex align-items-center justify-content-center"
+        >C</span
+      >
       <span class="sidebar__label">Contabil</span>
     </a>
   </aside>
 
   <div class="app-shell__body flex flex-column">
-    <nav class="navbar flex align-items-center justify-content-between" aria-label="Barra principal">
-      <div>
-        <h1 class="navbar__title">Outros Créditos/Débitos</h1>
-        <ol class="navbar__breadcrumb flex flex-wrap" aria-label="Breadcrumb">
-          <li><a href="#">Início</a></li>
-          <li>Outros Créditos/Débitos</li>
-        </ol>
+    <nav
+      class="navbar flex align-items-center justify-content-between"
+      aria-label="Barra principal"
+    >
+      <div class="flex align-items-center gap-3">
+        <button
+          type="button"
+          pButton
+          icon="pi pi-bars"
+          class="navbar__menu-button p-button-text p-button-secondary"
+          aria-label="Abrir menu"
+          (click)="menuAberto = true"
+        ></button>
+        <div>
+          <h1 class="navbar__title">Outros Créditos/Débitos</h1>
+          <ol class="navbar__breadcrumb flex flex-wrap" aria-label="Breadcrumb">
+            <li><a href="#">Início</a></li>
+            <li>Outros Créditos/Débitos</li>
+          </ol>
+        </div>
       </div>
 
-      <button class="navbar__action flex align-items-center justify-content-center" type="button" aria-label="Ajuda">?</button>
+      <button
+        class="navbar__action flex align-items-center justify-content-center"
+        type="button"
+        aria-label="Ajuda"
+      >
+        ?
+      </button>
     </nav>
 
     <main class="app-content flex-1">
@@ -28,3 +49,23 @@
     </main>
   </div>
 </div>
+<p-sidebar
+  [(visible)]="menuAberto"
+  position="left"
+  styleClass="mobile-sidebar"
+  [showCloseIcon]="true"
+>
+  <ng-template pTemplate="header"
+    ><span class="font-bold text-primary"
+      >Cooperativas e Bancos Digitais</span
+    ></ng-template
+  >
+  <a
+    class="mobile-sidebar__item flex align-items-center gap-2"
+    href="#"
+    (click)="menuAberto = false"
+    ><span class="sidebar__icon flex align-items-center justify-content-center"
+      >C</span
+    ><span>Contábil</span></a
+  >
+</p-sidebar>
