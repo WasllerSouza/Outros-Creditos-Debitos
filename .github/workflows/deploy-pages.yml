@@ -32,8 +32,9 @@ jobs:
 
       - run: npm run build -- --configuration production --base-href "/${{ github.event.repository.name }}/"
 
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v4
         with:
+          name: outros-creditos-debitos-pages
           path: dist/outros-creditos-debitos/browser
 
   deploy:
@@ -49,4 +50,6 @@ jobs:
     steps:
 
       - id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
+        with:
+          artifact_name: outros-creditos-debitos-pages
