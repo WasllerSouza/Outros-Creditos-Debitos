@@ -14,12 +14,13 @@ describe('consultaLotesReducer', () => {
     idFinal: '9',
     valorInicial: 500,
     valorFinal: 600,
-    dataInicial: new Date(2026, 0, 1),
-    dataFinal: new Date(2026, 0, 1),
+    dataRange: [new Date(2026, 0, 1), new Date(2026, 0, 1)],
   };
 
   it('returns the initial state for an unknown action', () => {
-    expect(consultaLotesReducer(undefined, { type: 'unknown' })).toBe(initialConsultaLotesState);
+    expect(consultaLotesReducer(undefined, { type: 'unknown' })).toBe(
+      initialConsultaLotesState,
+    );
   });
 
   it('filters lots and resets selection and pagination when searching', () => {
@@ -28,7 +29,10 @@ describe('consultaLotesReducer', () => {
       lotesSelecionados: [initialConsultaLotesState.todosLotes[0]],
       paginaAtual: 3,
     };
-    const result = consultaLotesReducer(state, ConsultaLotesActions.pesquisar({ filtro }));
+    const result = consultaLotesReducer(
+      state,
+      ConsultaLotesActions.pesquisar({ filtro }),
+    );
 
     expect(result.filtro).toEqual(filtro);
     expect(result.lotes.map(({ id }) => id)).toEqual([1]);
@@ -49,8 +53,7 @@ describe('consultaLotesReducer', () => {
           idFinal: '2',
           valorInicial: 1000,
           valorFinal: 1000,
-          dataInicial: new Date(2026, 0, 2),
-          dataFinal: new Date(2026, 0, 2),
+          dataRange: [new Date(2026, 0, 2), new Date(2026, 0, 2)],
         },
       }),
     );
@@ -66,7 +69,10 @@ describe('consultaLotesReducer', () => {
       lotesSelecionados: [initialConsultaLotesState.todosLotes[0]],
       paginaAtual: 1,
     };
-    const result = consultaLotesReducer(state, ConsultaLotesActions.limparFiltros());
+    const result = consultaLotesReducer(
+      state,
+      ConsultaLotesActions.limparFiltros(),
+    );
 
     expect(result.filtro).toBe(initialConsultaLotesState.filtro);
     expect(result.lotes).toEqual(initialConsultaLotesState.todosLotes);
@@ -80,7 +86,10 @@ describe('consultaLotesReducer', () => {
       initialConsultaLotesState,
       ConsultaLotesActions.selecionarLotes({ lotes }),
     );
-    const paged = consultaLotesReducer(selected, ConsultaLotesActions.trocarPagina({ pagina: 2 }));
+    const paged = consultaLotesReducer(
+      selected,
+      ConsultaLotesActions.trocarPagina({ pagina: 2 }),
+    );
 
     expect(selected.lotesSelecionados).toBe(lotes);
     expect(paged.paginaAtual).toBe(2);
